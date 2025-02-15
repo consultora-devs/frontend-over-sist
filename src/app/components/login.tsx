@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 function Login() {
+
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  console.log(email)
-  console.log(password)
+  const endpoint = process.env.URL_BACKEND || "variable"
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,37 +21,33 @@ function Login() {
       setError("Por favor, completa todos los campos.");
       return;
     }
-    if(email=="juan.perez@example.com" && password=="password123"){
-      router.push('/dashboard')
-    }
 
-    {
-      // try {
-      //   // Petición al backend (cambia la URL por la de tu API)
-      //   const response = await fetch("/api/login", {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //     },
-      //     body: JSON.stringify({ email, password }),
-      //   });
+    console.log("Haciendo solicitud con datos:", { email, password }); // Log para ver los datos antes de la solicitud
 
-      //   if (!response.ok) {
-      //     const data = await response.json();
-      //     setError(data.message || "Error al iniciar sesión.");
-      //     return;
-      //   }
+    try {
+      const response = await fetch("http://127.0.0.1:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      //   // Manejo de la respuesta
-      //   const data = await response.json();
-      //   console.log("Inicio de sesión exitoso:", data);
+      console.log("Respuesta de la API:", response); // Log para ver la respuesta de la API
 
-      //   // Redirige o haz algo con la respuesta
-      //   window.location.href = "/dashboard";
-      // } catch (err) {
-      //   console.error("Error:", err);
-      //   setError("Ocurrió un error. Inténtalo de nuevo más tarde.");
-      // }
+      if (!response.ok) {
+        const data = await response.json();
+        setError(data.message || "Error al iniciar sesión.");
+        return;
+      }
+
+      const data = await response.json();
+      console.log("Inicio de sesión exitoso:", data);
+
+      router.push('/dashboard');
+    } catch (err) {
+      console.error("Error al realizar la solicitud:", err);
+      setError("Ocurrió un error. Inténtalo de nuevo más tarde.");
     }
   };
 
@@ -62,7 +58,7 @@ function Login() {
           {/* Header */}
           <div className="text-center">
             <div className="inline-flex items-center justify-center   mb-4 transform hover:rotate-12 transition-transform duration-300">
-              <Image src="/logo-overhaul.jpg" alt="overhaul" width={140} height={140} className=" rounded-md p-2 bg-gray-50"/>
+              <Image src="/logo-overhaul.jpg" alt="overhaul" width={140} height={140} className=" rounded-md p-2 bg-gray-50" />
             </div>
             <h2 className="text-3xl font-bold  mb-2">Bienvenido </h2>
             <p className="">Ingresa a tu cuenta para iniciar sesion</p>

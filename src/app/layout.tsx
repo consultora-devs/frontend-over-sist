@@ -1,6 +1,8 @@
 import "./globals.css";
 import { Providers } from "./providers";
 import {ThemeSwitcher} from '@/app/components/ThemeSwitcher'
+import {Sidebar} from '@/app/components/slider'
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -10,8 +12,7 @@ export default function RootLayout({
     <html lang="en" className="dark  bg-background">
       <body>
         <Providers>
-        <ThemeSwitcher/>
-          {children}
+        {children}
         </Providers>
       </body>
     </html>
