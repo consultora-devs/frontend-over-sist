@@ -9,13 +9,17 @@ export default function RootLayout({
 }>) {
     return (
         <>
-            <header className="bg-gray-800 text-white w-full py-5 px-6 md:px-16 font-bold text-2xl text-center md:text-left">
-                OVERSIST
-            </header>
+
 
             <div className='flex'>
                 <Sidebar />
-                {children}
+
+                <div className='w-full'>
+                    <header className="bg-gray-800 text-white w-full py-5 pr-10  font-bold text-2xl text-right ">
+                        OVERSIST
+                    </header>
+                    {children}
+                </div>
             </div>
         </>
 

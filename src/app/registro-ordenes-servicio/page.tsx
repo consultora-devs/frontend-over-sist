@@ -1,10 +1,10 @@
 import React from 'react'
-import TransportForm from './TransportForm';
+import Formulario from './Formulario';
 
 function Page() {
   return (
     <div className='bg-gray-800 w-full'>
-        <TransportForm/>
+        <Formulario/>
     </div>
   )
 }

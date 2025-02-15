@@ -1,30 +1,52 @@
 'use client';
 
-import { FileText, Search, ClipboardList, BarChart3 } from 'lucide-react';
+import { FileText, Search, ClipboardList, BarChart3  } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const menuItems = [
   {
-    title: 'Registro de Ordenes de servicio',
+    title: 'Ordenes de servicio',
     icon: FileText,
+    opciones:{
+      ruta1:{
+        subRuta1:"/",
+        subRuta2:"/ruta2",
+        subRuta3:"/ruta3"
+      },
+
+      ruta2:"/ruta2",
+      ruta3:"/ruta3"
+    },
     href: '/registro-ordenes-servicio',
+  },
+
+
+  {
+    title: 'Nueva Orden',
+    icon: BarChart3,
+    href: '/nueva-orden',
+  },
+  {
+    title: 'Ver ordenes',
+    icon: Search,
+    href: '/ver-ordenes',
   },
   {
     title: 'Reportes',
-    icon: BarChart3,
+    icon: ClipboardList,
     href: '/reportes',
   },
   {
-    title: 'Búsqueda por Placa',
-    icon: Search,
-    href: '/busqueda-placa',
+    title: 'Empresas',
+    icon: ClipboardList,
+    href: '/empresas',
   },
   {
-    title: 'Búsqueda por DNI',
+    title: 'Contabilidad',
     icon: ClipboardList,
-    href: '/busqueda-dni',
+    href: '/contabilidad',
   },
 ];
 
@@ -54,12 +76,6 @@ export function Sidebar() {
           );
         })}
       </nav>
-
-      <div className="py-10 px-3">
-        <Link href="/" className="bg-blue-600 rounded-md py-2 px-4 w-full text-center">
-          Regresar
-        </Link>
-      </div>
     </div>
   );
 }

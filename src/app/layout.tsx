@@ -12,7 +12,6 @@ export default function RootLayout({
     <html lang="en" className="dark  bg-background">
       <body>
         <Providers>
-        
         {children}
         </Providers>
       </body>
