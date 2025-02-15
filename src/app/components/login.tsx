@@ -44,7 +44,7 @@ function Login() {
       const data = await response.json();
       console.log("Inicio de sesión exitoso:", data);
 
-      router.push('/dashboard');
+      router.push('/registro-ordenes-servicio');
     } catch (err) {
       console.error("Error al realizar la solicitud:", err);
       setError("Ocurrió un error. Inténtalo de nuevo más tarde.");
