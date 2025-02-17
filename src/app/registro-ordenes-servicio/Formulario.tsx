@@ -10,7 +10,7 @@ const token = Cookies.get('auth_token'); // Aquí obtienes el valor del token
 
 export default function Formulario() {
   // Tipo para las opciones del select
-  type OptionType = { value: string; label: string; ruc : string};
+  type OptionType = { value: string; label: string; ruc: string };
 
   const [file, setFile] = useState<File | null>(null);
   const [empresas, setEmpresas] = useState<OptionType[]>([]);
@@ -35,10 +35,10 @@ export default function Formulario() {
 
       const data = await response.json();
       // Mapear la respuesta para transformarla en el formato que necesita el react-select
-      const empresasOptions: OptionType[] = data.map((empresa: { id: string, razon_social: string , ruc : string}) => ({
+      const empresasOptions: OptionType[] = data.map((empresa: { id: string, razon_social: string, ruc: string }) => ({
         value: empresa.id, // Puede ser cualquier campo único como el 'id'
         label: empresa.razon_social, // El campo que se muestra en el select
-        ruc : empresa.ruc
+        ruc: empresa.ruc
       }));
 
       setEmpresas(empresasOptions);
@@ -95,6 +95,19 @@ export default function Formulario() {
               </div>
 
               <div className="space-y-2">
+                <label htmlFor="fecha-servicio" className="block text-sm font-medium text-gray-300">
+                  Fecha Servicio
+                </label>
+                <input
+                  type="date"
+                  id="fecha-servicio"
+                  className="w-full px-4 py-2 rounded-md border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                  {...register("fecha_servicio")}
+                />
+              </div>
+
+              <div className="space-y-2">
                 <label htmlFor="tipo-unidad" className="block text-sm font-medium text-gray-300">
                   Tipo Unidad
                 </label>
@@ -118,6 +131,39 @@ export default function Formulario() {
                   required
                   {...register("placa")}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <label htmlFor="area" className="block text-sm font-medium text-gray-300">
+                  Área
+                </label>
+                <select
+                  id="area"
+                  className="w-full px-4 py-2 rounded-md border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                  {...register("area")}
+                >
+                  <option value="IZAJE">IZAJE</option>
+                  <option value="END">END</option>
+                  <option value="MANTTO IND">MANTTO IND</option>
+                  <option value="FARADAY">FARADAY</option>
+                </select>
+              </div>
+
+
+              <div className="space-y-2">
+                <label htmlFor="certificadora" className="block text-sm font-medium text-gray-300">
+                  Certificadora
+                </label>
+                <select
+                  id="certificadora"
+                  className="w-full px-4 py-2 rounded-md border border-gray-600 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  required
+                  {...register("certificadora")}
+                >
+                  <option value="OVERHAUL">OVERHAUL</option>
+                  <option value="PREXA">PREXA</option>
+                </select>
               </div>
 
               <div className="space-y-2">
