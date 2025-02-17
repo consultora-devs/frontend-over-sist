@@ -11,13 +11,13 @@ const menuItems = [
     title: 'Ordenes de servicio',
     icon: FileText,
     opciones: {
+      "Nueva orden": "/nueva-orden",
+      ruta3: "/ruta3",
       ruta1: {
         subRuta1: "/subruta1",
         subRuta2: "/subruta2",
         subRuta3: "/subruta3",
-      },
-      ruta2: "/ruta2",
-      ruta3: "/ruta3",
+      }
     },
     href: '/registro-ordenes-servicio',
   },
@@ -49,7 +49,7 @@ const menuItems = [
 ];
 
 // Función recursiva para renderizar menús anidados
-function RecursiveMenu({ items }: { items: any }) {
+function RecursiveMenu({ items, level = 1 }: { items: any; level?: number }) {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
   const toggleMenu = (key: string) => {
@@ -57,30 +57,36 @@ function RecursiveMenu({ items }: { items: any }) {
   };
 
   return (
-    <ul className="space-y-1">
+    <ul className="w-full">
       {Object.entries(items).map(([key, value]) => {
-        const hasChildren = typeof value === 'object'; // Verifica si es un objeto anidado
+        const hasChildren = typeof value === 'object';
+
         return (
-          <li key={key}>
+          <li key={key} className="w-full">
             {hasChildren ? (
               <button
                 onClick={() => toggleMenu(key)}
                 className="flex w-full items-center justify-between px-4 py-2 text-left text-white rounded-md hover:bg-gray-900"
+                style={{ paddingLeft: `${level * 16}px` }} // Reduce progresivamente
               >
                 <span>{key}</span>
                 {openMenus[key] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </button>
             ) : (
-              typeof value === 'string' && ( // Solo renderiza <Link> si value es string (una URL)
-                <Link href={value} className="block px-6 py-1 text-sm text-gray-300 hover:bg-gray-800 rounded-md">
+              typeof value === 'string' && (
+                <Link
+                  href={value}
+                  className="block w-full px-4 py-2 text-sm hover:bg-gray-800 rounded-md"
+                  style={{ paddingLeft: `${level * 16}px` }} // Reduce progresivamente
+                >
                   {key}
                 </Link>
               )
             )}
 
             {hasChildren && openMenus[key] && (
-              <div className="ml-4">
-                <RecursiveMenu items={value} />
+              <div>
+                <RecursiveMenu items={value} level={level + 1} />
               </div>
             )}
           </li>
