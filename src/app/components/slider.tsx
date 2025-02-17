@@ -10,17 +10,21 @@ const menuItems = [
   {
     title: 'Ordenes de servicio',
     icon: FileText,
+    href: '/orden-de-servicio',
+    
     opciones: {
-      "Nueva orden": "/nueva-orden",
-      ruta3: "/ruta3",
-      ruta1: {
+      "Nueva orden": "/ordenes-de-servicio",
+      "filtrar": "/filtrar",
+      "Generar orden": {
         subRuta1: "/subruta1",
         subRuta2: "/subruta2",
         subRuta3: "/subruta3",
       }
     },
-    href: '/registro-ordenes-servicio',
+
   },
+
+  
   {
     title: 'Nueva Orden',
     icon: BarChart3,
@@ -106,7 +110,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col w-full md:w-72 bg-gray-700 h-screen">
+    <div className="flex flex-col w-full md:w-72 bg-gray-800 ">
       <div className="p-6">
         <h2 className="text-2xl font-bold text-white">SISTEMA</h2>
       </div>

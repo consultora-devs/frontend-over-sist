@@ -48,7 +48,7 @@ function Login() {
       Cookies.set('auth_token', data.token, { expires: 7 }); // El token se guardará por 7 días, puedes ajustarlo
 
       // Redirigir a otra página después de iniciar sesión
-      router.push('/registro-ordenes-servicio');
+      router.push('/ordenes-de-servicio');
     } catch (err) {
       console.error("Error al realizar la solicitud:", err);
       setError("Ocurrió un error. Inténtalo de nuevo más tarde.");

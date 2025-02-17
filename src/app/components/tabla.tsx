@@ -267,7 +267,7 @@ export function DataTable() {
               <SelectTrigger className="w-[140px] bg-gray-700/50">
                 <SelectValue placeholder="Estado" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-800">
                 <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="activo">Activo</SelectItem>
                 <SelectItem value="inactivo">Inactivo</SelectItem>
@@ -300,11 +300,7 @@ export function DataTable() {
         <div className="relative overflow-x-auto">
           <Table>
             <TableHeader>
-              {
-
-              }
               <TableRow className="border-gray-700 hover:bg-gray-800">
-                <TableHead className="text-gray-300">Empresa</TableHead>
                 <TableHead className="text-gray-300">Empresa</TableHead>
                 <TableHead className="text-gray-300">RUC</TableHead>
                 <TableHead className="text-gray-300">Socio</TableHead>
@@ -341,10 +337,10 @@ export function DataTable() {
                     <TableCell>
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${company.status === "Activo"
-                            ? "bg-green-500/20 text-green-400"
-                            : company.status === "Inactivo"
-                              ? "bg-red-500/20 text-red-400"
-                              : "bg-yellow-500/20 text-yellow-400"
+                          ? "bg-green-500/20 text-green-400"
+                          : company.status === "Inactivo"
+                            ? "bg-red-500/20 text-red-400"
+                            : "bg-yellow-500/20 text-yellow-400"
                           }`}
                       >
                         {company.status}
