@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 
 interface PropsInput {
   className: string;
-  empresa: { value: string; label: string }[]; // Cambiar el tipo de la prop
+  empresa: { value: string; label: string; ruc: string}[]; // Cambiar el tipo de la prop
   setValue: (name: string, value: any) => void; // Agregar prop setValue para actualizar el formulario
 }
 
@@ -15,7 +15,12 @@ function InputEmpresa({ className, empresa, setValue }: PropsInput) {
   useEffect(() => {
     if (selectedEmpresa) {
       setValue('empresa', selectedEmpresa.value); // Actualiza el valor de 'empresa' en react-hook-form
+      const empresaSeleccionada = empresa.find(e => e.value === selectedEmpresa.value);
+      if (empresaSeleccionada) {
+        setValue("ruc", empresaSeleccionada.ruc); // Actualiza el RUC
+      }
     }
+
   }, [selectedEmpresa, setValue]);
 
   return (

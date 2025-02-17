@@ -10,7 +10,7 @@ const token = Cookies.get('auth_token'); // Aquí obtienes el valor del token
 
 export default function Formulario() {
   // Tipo para las opciones del select
-  type OptionType = { value: string; label: string };
+  type OptionType = { value: string; label: string; ruc : string};
 
   const [file, setFile] = useState<File | null>(null);
   const [empresas, setEmpresas] = useState<OptionType[]>([]);
@@ -35,9 +35,10 @@ export default function Formulario() {
 
       const data = await response.json();
       // Mapear la respuesta para transformarla en el formato que necesita el react-select
-      const empresasOptions: OptionType[] = data.map((empresa: { id: string, razon_social: string }) => ({
+      const empresasOptions: OptionType[] = data.map((empresa: { id: string, razon_social: string , ruc : string}) => ({
         value: empresa.id, // Puede ser cualquier campo único como el 'id'
         label: empresa.razon_social, // El campo que se muestra en el select
+        ruc : empresa.ruc
       }));
 
       setEmpresas(empresasOptions);
