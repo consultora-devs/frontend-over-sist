@@ -19,7 +19,7 @@ export default function Formulario() {
   useEffect(() => {
     const peticion = async () => {
       const token = Cookies.get("auth_token"); // Obtiene el token de la cookie
-
+      
       const response = await fetch("http://127.0.0.1:8000/api/empresas", {
         method: "GET",
         headers: {
