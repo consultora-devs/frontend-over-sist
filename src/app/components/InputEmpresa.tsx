@@ -2,36 +2,67 @@
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
+import Cookies from 'js-cookie';
 
 interface PropsInput {
   className: string;
-  empresa: { value: string; label: string; ruc: string}[]; // Cambiar el tipo de la prop
   setValue: (name: string, value: any) => void; // Agregar prop setValue para actualizar el formulario
 }
 
-function InputEmpresa({ className, empresa, setValue }: PropsInput) {
+function InputEmpresa({ className, setValue }: PropsInput) {
+  const [empresas, setEmpresas] = useState<{ value: string; label: string; ruc: string }[]>([]);
   const [selectedEmpresa, setSelectedEmpresa] = useState<{ value: string; label: string } | null>(null);
+
+  useEffect(() => {
+    const fetchEmpresas = async () => {
+      const token = Cookies.get("auth_token"); // Obtiene el token de la cookie
+
+      const response = await fetch("http://127.0.0.1:8000/api/empresas", {
+        method: "GET",
+        headers: {
+          "Authorization": `Bearer ${token}`, // Enviar el token en el header
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Error en la petición:", response.status);
+        return;
+      }
+
+      const data = await response.json();
+      // Mapear la respuesta para transformarla en el formato que necesita react-select
+      const empresasOptions = data.map((empresa: { id: string, razon_social: string, ruc: string }) => ({
+        value: empresa.id, // Puede ser cualquier campo único como el 'id'
+        label: empresa.razon_social, // El campo que se muestra en el select
+        ruc: empresa.ruc
+      }));
+
+      setEmpresas(empresasOptions);
+    };
+
+    fetchEmpresas();
+  }, []);
 
   useEffect(() => {
     if (selectedEmpresa) {
       setValue('empresa', selectedEmpresa.value); // Actualiza el valor de 'empresa' en react-hook-form
-      const empresaSeleccionada = empresa.find(e => e.value === selectedEmpresa.value);
+      const empresaSeleccionada = empresas.find(e => e.value === selectedEmpresa.value);
       if (empresaSeleccionada) {
         setValue("ruc", empresaSeleccionada.ruc); // Actualiza el RUC
       }
     }
-
-  }, [selectedEmpresa, setValue]);
+  }, [selectedEmpresa, setValue, empresas]);
 
   return (
-    <div>
+    <div className={className}>
       <div className="space-y-2">
         <label htmlFor="empresa" className="block text-sm font-medium text-gray-300">
           Empresa
         </label>
         <Select
           id="empresa"
-          options={empresa} // Aquí usamos la prop `empresa` que ya tiene los datos dinámicos
+          options={empresas} // Aquí usamos las empresas obtenidas desde la petición
           value={selectedEmpresa}
           onChange={(selectedOption) => setSelectedEmpresa(selectedOption)} // Captura el valor seleccionado
           classNamePrefix="react-select"

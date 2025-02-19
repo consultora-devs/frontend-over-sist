@@ -1,7 +1,6 @@
 
 import { Sidebar } from '@/app/components/slider'
-import Header from '@/app/components/header'
-import React from 'react';
+import LogoutButton from "@/app/components/LogoutButton"
 
 export default function EmpresasLayout({
     children,
@@ -10,7 +9,10 @@ export default function EmpresasLayout({
 }>) {
     return (
         <div className=''>
-           <Header/>
+            <header className="bg-gray-800 text-white w-full py-5 px-10  font-bold text-2xl text-right flex items-center justify-between">
+                <LogoutButton />
+                <p>OVERSIST</p>
+            </header>
            <div className='flex'>
            <Sidebar />
             {children}

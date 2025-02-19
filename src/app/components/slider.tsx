@@ -11,24 +11,20 @@ const menuItems = [
     title: 'Ordenes de servicio',
     icon: FileText,
     href: '/orden-de-servicio',
-    
     opciones: {
       "Nueva orden": "/ordenes-de-servicio",
-      "filtrar": "/filtrar",
+      "Filtrar": "/filtrar",
       "Generar orden": {
         subRuta1: "/subruta1",
         subRuta2: "/subruta2",
         subRuta3: "/subruta3",
       }
     },
-
   },
-
-  
   {
-    title: 'Nueva Orden',
-    icon: BarChart3,
-    href: '/nueva-orden',
+    title: 'Equipos',
+    icon: Search,
+    href: '/equipos',
   },
   {
     title: 'Ver ordenes',
@@ -52,7 +48,6 @@ const menuItems = [
   },
 ];
 
-// Función recursiva para renderizar menús anidados
 function RecursiveMenu({ items, level = 1 }: { items: any; level?: number }) {
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
 
@@ -61,7 +56,7 @@ function RecursiveMenu({ items, level = 1 }: { items: any; level?: number }) {
   };
 
   return (
-    <ul className="w-full">
+    <ul className="w-full pl-4">
       {Object.entries(items).map(([key, value]) => {
         const hasChildren = typeof value === 'object';
 
@@ -70,18 +65,18 @@ function RecursiveMenu({ items, level = 1 }: { items: any; level?: number }) {
             {hasChildren ? (
               <button
                 onClick={() => toggleMenu(key)}
-                className="flex w-full items-center justify-between px-4 py-2 text-left text-white rounded-md hover:bg-gray-900"
-                style={{ paddingLeft: `${level * 16}px` }} // Reduce progresivamente
+                className="flex items-center justify-between w-full p-2 rounded-md text-white hover:bg-gray-700 transition-all"
+                style={{ paddingLeft: `${level * 16}px` }}
               >
-                <span>{key}</span>
+                <span className="text-sm">{key}</span>
                 {openMenus[key] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
               </button>
             ) : (
               typeof value === 'string' && (
                 <Link
                   href={value}
-                  className="block w-full px-4 py-2 text-sm hover:bg-gray-800 rounded-md"
-                  style={{ paddingLeft: `${level * 16}px` }} // Reduce progresivamente
+                  className="block w-full px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 rounded-md"
+                  style={{ paddingLeft: `${level * 16}px` }}
                 >
                   {key}
                 </Link>
@@ -100,7 +95,6 @@ function RecursiveMenu({ items, level = 1 }: { items: any; level?: number }) {
   );
 }
 
-
 export function Sidebar() {
   const pathname = usePathname();
   const [openMenus, setOpenMenus] = useState<{ [key: string]: boolean }>({});
@@ -110,9 +104,9 @@ export function Sidebar() {
   };
 
   return (
-    <div className="flex flex-col w-full md:w-72 bg-gray-800 ">
-      <div className="p-6">
-        <h2 className="text-2xl font-bold text-white">SISTEMA</h2>
+    <div className="flex flex-col w-full md:w-80 bg-gray-800 py-4 shadow-lg">
+      <div className="px-6 py-4 mb-6">
+        <h2 className="text-2xl font-bold text-white">OVER-SIST</h2>
       </div>
 
       <nav className="flex-1 space-y-1 px-3">
@@ -126,11 +120,11 @@ export function Sidebar() {
                 <>
                   <button
                     onClick={() => toggleMenu(item.title)}
-                    className="flex items-center justify-between w-full p-2 rounded-md gap-2 py-3 hover:bg-gray-900 transition-all text-white"
+                    className="flex items-center justify-between w-full p-3 rounded-md gap-2 text-white hover:bg-gray-700 transition-all"
                   >
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 items-center">
                       <Icon className="h-5 w-5 text-white" />
-                      <span>{item.title}</span>
+                      <span className="text-sm">{item.title}</span>
                     </div>
                     {openMenus[item.title] ? <ChevronDown className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
                   </button>
@@ -145,12 +139,12 @@ export function Sidebar() {
                 <Link
                   href={item.href}
                   className={cn(
-                    'flex p-2 rounded-md gap-2 py-3 hover:bg-gray-900 transition-all text-white',
-                    pathname === item.href ? 'bg-gray-800' : 'bg-gray-700'
+                    'flex p-3 rounded-md gap-2 items-center text-white hover:bg-gray-700 transition-all',
+                    pathname === item.href ? 'bg-gray-700' : 'bg-gray-800'
                   )}
                 >
                   <Icon className="h-5 w-5 text-white" />
-                  <span>{item.title}</span>
+                  <span className="text-sm">{item.title}</span>
                 </Link>
               )}
             </div>
