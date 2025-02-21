@@ -3,9 +3,14 @@ import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
+import { UseFormSetValue } from 'react-hook-form';
+import { FormData } from '@/app/equipos/registro/page';
+
+
+
 interface PropsInput {
   className: string;
-  setValue: (name: string, value: any) => void;
+  setValue: UseFormSetValue<FormData>;
 }
 
 function InputEmpresa({ className, setValue }: PropsInput) {

@@ -32,21 +32,18 @@ export default function RootLayout({
   return (
     <html lang="en" className={darkMode ? "dark" : ""}>
       <body className="bg-white dark:bg-gray-800 transition-colors duration-300">
+
         <Providers>
-
-          <div className="w-full flex flex-col gap-10">
-
-            <div>
+          <div className="w-full flex flex-col">
+            <div className="z-auto">
               <ButtonTheme darkMode={darkMode} toggleTheme={toggleTheme} />
             </div>
-            
             <div>
               {children}
             </div>
-
           </div>
-
         </Providers>
+        
       </body>
     </html>
   );

@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import InputEmpresa from '../components/InputEmpresa';
 import { FileUpload } from "@/app/components/FileUpload";
 
 export default function Formulario() {
+
   const { register, handleSubmit, setValue, getValues } = useForm();
 
   const onSubmit = (data: any) => {
@@ -27,7 +27,9 @@ export default function Formulario() {
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div className="grid grid-cols-4 md:grid-cols-2 gap-5 w-full">
-              <InputEmpresa className="" setValue={setValue} />
+              
+              
+              {/* <InputEmpresa className="" setValue={setValue} />*/ }
 
               <div className="space-y-2">
                 <label htmlFor="tipo-unidad" className="block text-sm font-medium text-gray-900 dark:text-gray-300">

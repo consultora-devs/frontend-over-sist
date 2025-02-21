@@ -2,9 +2,6 @@
 import React from 'react'
 import 'flowbite';
 import Link from 'next/link';
-import ButtonTheme from './ButtonTheme';
-
-
 function Sidevar() {
     return (
         <div>
@@ -80,9 +77,9 @@ function Sidevar() {
                                 </svg>
                             </button>
                             <ul id="dropdown-example" className="hidden py-2 space-y-2">
-                                <li>
+                                {/* <li>
                                         <Link href="/ordenes-de-servicio" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Nueva orden</Link>
-                                </li>
+                                </li> */}
                                 <li>
                                     <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">Equipos</a>
                                 </li>
