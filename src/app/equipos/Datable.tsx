@@ -60,7 +60,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading = false, onEdit, on
   }
 
   return (
-    <div className="bg-white dark:bg-gray-900 py-5 min-w-full px-10 h-screen">
+    <div className="bg-white dark:bg-gray-900 py-12 min-w-full px-10 h-full">
       <div className="flex items-center flex-row-reverse justify-end py-5 gap-5 w-full">
         <div className="w-full flex justify-end px-5">
           <Button

@@ -114,7 +114,7 @@ function InputEmpresa({ className, setValue }: PropsInput) {
           value={selectedEmpresa}
           onChange={(selectedOption) => setSelectedEmpresa(selectedOption)}
           classNamePrefix="react-select"
-          placeholder="Buscar o seleccionar"
+          placeholder="buscar o seleccionar"
           className="text-white"
           styles={customStyles}
         />
