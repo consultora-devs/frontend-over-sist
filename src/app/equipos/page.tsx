@@ -8,6 +8,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState<TableData[]>([]);
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
+  const [keys, setKeys] = useState<string[]>([])
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +29,18 @@ function App() {
         }
 
         const result = await response.json();
-        setData(result); // Aquí seteamos la data que nos devuelve la API
+
+        const processedData = processData(result.data); // Procesar datos
+        setData(processedData)
+
+        const keys_data = Object.keys(result.data[0])
+        .filter((key) => key !== "id") 
+        .map((key) =>
+          key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())
+        );
+
+        setKeys(keys_data);
+        
       } catch (error: any) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
@@ -50,19 +62,75 @@ function App() {
     // Implementa la lógica de eliminación
   };
 
+
+  const formatDate = (isoDate: string): string => {
+    const date = new Date(isoDate); // Convertir a objeto Date
+    const day = String(date.getDate()).padStart(2, '0'); // Día (2 dígitos)
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Mes (2 dígitos)
+    const year = date.getFullYear(); // Año (4 dígitos)
+    return `${day}/${month}/${year}`; // Formato d/m/Y
+};
+
+const processData = (data: any[]): any[] => {
+  return data.map(item => ({
+      ...item,
+      fecha_servicio: formatDate(item.fecha_servicio), // Convertir fecha_servicio
+      fecha_facturacion: formatDate(item.fecha_facturacion), // Convertir fecha_facturacion
+  }));
+};
+
   return (
-    <div className="w-full container">
+    <div className="w-full container px-4">
       {error ? (
         <div className="error-message" style={{ color: 'red', padding: '10px', background: '#f8d7da', borderRadius: '5px' }}>
           {error}
         </div>
       ) : null}
 
-      <DataTable
+      {/* <DataTable
         data={data} loading={loading}
         onEdit={handleEdit}
         onDelete={handleDelete}
-      />
+      /> */}
+      <div className='mt-6 w-full'>
+        <span className='font-bold text-lg'>Equipos</span>
+        <div className="relative overflow-x-auto mt-4 h-screen max-h-[calc(100vh-180px)]">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400 border dark:border-gray-700">
+                <thead className="text-sm text-gray-700 bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" className="px-1 ps-2 py-0">
+                            Action
+                        </th>
+                        {keys.map((key) => (
+                          <th key={key} scope="col" className="px-1.5 py-0 border-b dark:border-gray-700 font-semibold">
+                            {key.charAt(0).toUpperCase() + key.slice(1)}
+                          </th>
+                        ))}
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                {data.map((item, rowIndex) => (
+                  <tr
+                    key={String(item.id) || rowIndex} // Convertir 'id' a string o usar 'rowIndex' como fallback
+                    className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
+                  >
+                    <td className="px-1.5 ps-2 py-1">Actions</td>
+                    {Object.keys(item)
+                      .filter((key) => key !== "id") // Excluir 'id'
+                      .map((key, colIndex) => (
+                        <td key={`${rowIndex}-${colIndex}`} className="px-1.5 text-[1em] py-1 text-nowrap">
+                          {item[key]}
+                        </td>
+                      ))}
+                  </tr>
+                ))}
+
+                </tbody>
+            </table>
+        </div>
+
+      </div>
     </div>
   );
 }
