@@ -46,6 +46,7 @@ const menuItems = [
     icon: ClipboardList,
     href: '/contabilidad',
   },
+
 ];
 
 function RecursiveMenu({ items, level = 1 }: { items: any; level?: number }) {
@@ -106,7 +107,7 @@ export function Sidebar() {
   return (
     <div className="flex flex-col w-full md:w-80 bg-gray-800 py-4 shadow-lg">
       <div className="px-6 py-4 mb-6">
-        <h2 className="text-2xl font-bold text-white">OVER-SIST</h2>
+        <h2 className="text-2xl font-bold text-white">OVER-SITE</h2>
       </div>
 
       <nav className="flex-1 space-y-1 px-3">

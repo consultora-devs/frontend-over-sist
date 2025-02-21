@@ -1,7 +1,5 @@
 
-import { Sidebar } from '@/app/components/slider'
-import Header from '@/app/components/header'
-import React from 'react';
+import Sidevar from "@/app/components/sidebar"
 
 export default function EmpresasLayout({
     children,
@@ -10,11 +8,11 @@ export default function EmpresasLayout({
 }>) {
     return (
         <div className=''>
-           <Header/>
-           <div className='flex'>
-           <Sidebar />
-            {children}
-           </div>
+            <Sidevar />
+            <div className="py-12 sm:ml-64">
+                {children}
+            </div>
+
         </div>
     );
 }

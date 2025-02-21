@@ -53,7 +53,7 @@ export function FileUpload() {
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
-      <h1 className='text-3xl text-center  font-bold pb-10'>File Upload Component</h1>
+      <h1 className='text-3xl text-center  font-bold pb-10'>Subir Archivos Multiples</h1>
       <div
         className={`relative border-2 border-dashed rounded-lg p-8 transition-all duration-300 ease-in-out
           ${isDragging 

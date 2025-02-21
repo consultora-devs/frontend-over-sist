@@ -1,9 +1,12 @@
 import React from 'react'
-import LogoutButton from "@/app/components/LogoutButton"
+import Image from 'next/image'
 function Header() {
     return (
-        <header className="bg-gray-800 text-white w-full py-5 px-10  font-bold text-2xl text-right flex items-center justify-end">
-            <p>OVERSIST</p>
+        <header className=" text-white w-full py-2 px-10  font-bold text-2xl text-right flex items-center justify-end">   
+
+                <Image src="/logo-overhaul.jpg" alt="logo" width={120} height={120}
+                    className="rounded-md p-1 bg-white"
+                />
         </header>
     )
 }

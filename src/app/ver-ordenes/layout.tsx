@@ -1,6 +1,5 @@
 
-import { Sidebar } from '@/app/components/slider'
-import LogoutButton from "@/app/components/LogoutButton"
+import Sidevar from "@/app/components/sidebar"
 
 export default function EmpresasLayout({
     children,
@@ -9,14 +8,11 @@ export default function EmpresasLayout({
 }>) {
     return (
         <div className=''>
-            <header className="bg-gray-800 text-white w-full py-5 px-10  font-bold text-2xl text-right flex items-center justify-between">
-                <LogoutButton />
-                <p>OVERSIST</p>
-            </header>
-           <div className='flex'>
-           <Sidebar />
-            {children}
-           </div>
+            <Sidevar />
+            <div className="py-12 sm:ml-64">
+                {children}
+            </div>
+
         </div>
     );
 }

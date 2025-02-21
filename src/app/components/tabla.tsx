@@ -11,7 +11,13 @@ import {
 } from "../components/ui/table";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "../components/ui/dialog";
 import { Label } from "../components/ui/label";
 import {
   Select,
@@ -23,16 +29,13 @@ import {
 import {
   PlusCircle,
   Search,
-  Edit2,
   Trash2,
-  Filter,
   Building2,
   FileSpreadsheet,
-  Users,
 } from "lucide-react";
 import { useToast } from "../hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 interface Company {
   id: number;
@@ -65,41 +68,41 @@ export function DataTable() {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [loading, setLoading] = useState(false); // Estado de carga
+  const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchCompanies = async () => {
-      setLoading(true); // Inicia la carga
-      const token = Cookies.get("auth_token"); // Obtiene el token de la cookie
+      setLoading(true);
+      const token = Cookies.get("auth_token");
       try {
         const response = await fetch("http://127.0.0.1:8000/api/empresas", {
           method: "GET",
           headers: {
-            "Authorization": `Bearer ${token}`, // Enviar el token en el header
+            Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
         });
         const companies = await response.json();
-        
+
         const mappedData = companies.map((company: any) => ({
           id: company.id,
           businessName: company.razon_social,
-          tradeName: "", // Aquí puedes asignar un valor si lo necesitas
+          tradeName: "", // Puedes asignar un valor si lo necesitas
           ruc: company.ruc,
-          partner: "", // Aquí puedes asignar un valor si lo necesitas
-          sector: "",  // Aquí puedes asignar un valor si lo necesitas
-          employeeCount: 0, // Esto también lo puedes ajustar si es necesario
-          status: "Activo",  // Aquí lo puedes ajustar según tu lógica
-          registrationDate: "", // Puedes asignar la fecha si tienes
-          lastUpdate: "", // Puedes asignar la fecha si tienes
+          partner: "", // Puedes asignar un valor si lo necesitas
+          sector: "", // Puedes asignar un valor si lo necesitas
+          employeeCount: 0, // Ajusta este valor si es necesario
+          status: "Activo", // Ajusta según tu lógica
+          registrationDate: "", // Asigna la fecha si la tienes
+          lastUpdate: "", // Asigna la fecha si la tienes
         }));
-        
+
         setData(mappedData);
       } catch (error) {
         console.error("Error fetching companies:", error);
       } finally {
-        setLoading(false); // Detiene la carga
+        setLoading(false);
       }
     };
 
@@ -108,10 +111,13 @@ export function DataTable() {
 
   const filteredData = data.filter((company) => {
     const matchesSearch =
-      company.businessName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      company.businessName
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase()) ||
       company.ruc.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus =
-      statusFilter === "all" || company.status.toLowerCase() === statusFilter.toLowerCase();
+      statusFilter === "all" ||
+      company.status.toLowerCase() === statusFilter.toLowerCase();
     return matchesSearch && matchesStatus;
   });
 
@@ -137,7 +143,8 @@ export function DataTable() {
       setIsAddDialogOpen(false);
       toast({
         title: "Empresa agregada",
-        description: "La empresa ha sido registrada exitosamente.",
+        description:
+          "La empresa ha sido registrada exitosamente.",
       });
     }
   };
@@ -148,12 +155,17 @@ export function DataTable() {
         ...editingCompany,
         lastUpdate: new Date().toISOString().split("T")[0],
       };
-      setData(data.map((company) => (company.id === updatedCompany.id ? updatedCompany : company)));
+      setData(
+        data.map((company) =>
+          company.id === updatedCompany.id ? updatedCompany : company
+        )
+      );
       setEditingCompany(null);
       setIsEditDialogOpen(false);
       toast({
         title: "Empresa actualizada",
-        description: "Los datos de la empresa han sido actualizados exitosamente.",
+        description:
+          "Los datos de la empresa han sido actualizados exitosamente.",
       });
     }
   };
@@ -162,7 +174,8 @@ export function DataTable() {
     setData(data.filter((company) => company.id !== id));
     toast({
       title: "Empresa eliminada",
-      description: "La empresa ha sido eliminada exitosamente.",
+      description:
+        "La empresa ha sido eliminada exitosamente.",
       variant: "destructive",
     });
   };
@@ -170,19 +183,19 @@ export function DataTable() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-3xl font-bold flex items-center gap-2">
+        <h2 className="text-3xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
           <Building2 className="h-8 w-8" />
           Lista de Empresas
         </h2>
         <div className="flex items-center gap-2">
-          <FileSpreadsheet className="h-5 w-5" />
-          <span className="text-sm text-gray-400">
+          <FileSpreadsheet className="h-5 w-5 text-gray-600 dark:text-gray-400" />
+          <span className="text-sm text-gray-600 dark:text-gray-400">
             Total: {filteredData.length} empresas
           </span>
         </div>
       </div>
 
-      <div className="rounded-lg border bg-gray-800/50 border-gray-700 backdrop-blur-sm">
+      <div className="rounded-lg border bg-white dark:bg-gray-800/50 border-gray-200 dark:border-gray-700 backdrop-blur-sm">
         <div className="p-4 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="relative flex-1 w-full">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-gray-400" />
@@ -190,18 +203,15 @@ export function DataTable() {
               placeholder="Buscar empresa, RUC, socio..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-8 bg-gray-700/50 border-gray-600 text-white"
+              className="pl-8 bg-gray-100 border-gray-300 text-gray-900 dark:bg-gray-700/50 dark:border-gray-600 dark:text-white"
             />
           </div>
           <div className="flex gap-2 w-full sm:w-auto">
-            <Select
-              value={statusFilter}
-              onValueChange={setStatusFilter}
-            >
-              <SelectTrigger className="w-[140px] bg-gray-700/50">
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-[140px] bg-gray-100 dark:bg-gray-700/50">
                 <SelectValue placeholder="Estado" />
               </SelectTrigger>
-              <SelectContent className="bg-gray-800">
+              <SelectContent className="bg-white dark:bg-gray-800">
                 <SelectItem value="all">Todos</SelectItem>
                 <SelectItem value="activo">Activo</SelectItem>
                 <SelectItem value="inactivo">Inactivo</SelectItem>
@@ -215,7 +225,7 @@ export function DataTable() {
                   Nueva Empresa
                 </Button>
               </DialogTrigger>
-              <DialogContent className="bg-gray-800 text-white">
+              <DialogContent className="bg-white text-gray-900 dark:bg-gray-800 dark:text-white">
                 <DialogHeader>
                   <DialogTitle className="flex items-center gap-2">
                     <Building2 className="h-5 w-5" />
@@ -224,24 +234,41 @@ export function DataTable() {
                 </DialogHeader>
                 <div className="grid gap-4 py-4">
                   <div className="grid gap-2">
-                    <Label>Razón Social</Label>
+                    <Label className="text-gray-900 dark:text-white">
+                      Razón Social
+                    </Label>
                     <Input
                       value={newCompany.businessName || ""}
-                      onChange={(e) => setNewCompany({ ...newCompany, businessName: e.target.value })}
-                      className="bg-gray-700"
+                      onChange={(e) =>
+                        setNewCompany({
+                          ...newCompany,
+                          businessName: e.target.value,
+                        })
+                      }
+                      className="bg-gray-100 dark:bg-gray-700"
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label>RUC</Label>
+                    <Label className="text-gray-900 dark:text-white">
+                      RUC
+                    </Label>
                     <Input
                       value={newCompany.ruc || ""}
-                      onChange={(e) => setNewCompany({ ...newCompany, ruc: e.target.value })}
-                      className="bg-gray-700"
+                      onChange={(e) =>
+                        setNewCompany({
+                          ...newCompany,
+                          ruc: e.target.value,
+                        })
+                      }
+                      className="bg-gray-100 dark:bg-gray-700"
                       maxLength={11}
                     />
                   </div>
                 </div>
-                <Button onClick={handleAdd} className="bg-blue-600 hover:bg-blue-700">
+                <Button
+                  onClick={handleAdd}
+                  className="bg-blue-600 hover:bg-blue-700"
+                >
                   Registrar Empresa
                 </Button>
               </DialogContent>
@@ -257,10 +284,16 @@ export function DataTable() {
           ) : (
             <Table>
               <TableHeader>
-                <TableRow className="border-gray-700 hover:bg-gray-800">
-                  <TableHead className="text-gray-300">Empresa</TableHead>
-                  <TableHead className="text-gray-300">RUC</TableHead>
-                  <TableHead className="text-gray-300">Acciones</TableHead>
+                <TableRow className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800">
+                  <TableHead className="text-gray-900 dark:text-gray-300">
+                    Empresa
+                  </TableHead>
+                  <TableHead className="text-gray-900 dark:text-gray-300">
+                    RUC
+                  </TableHead>
+                  <TableHead className="text-gray-900 dark:text-gray-300">
+                    Acciones
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -272,21 +305,25 @@ export function DataTable() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.2 }}
-                      className="border-gray-700 hover:bg-gray-800"
+                      className="border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800"
                     >
                       <TableCell className="font-medium">
                         <div>
-                          <p className="text-white">{company.businessName}</p>
+                          <p className="text-gray-900 dark:text-white">
+                            {company.businessName}
+                          </p>
                         </div>
                       </TableCell>
-                      <TableCell className="text-gray-300">{company.ruc}</TableCell>
+                      <TableCell className="text-gray-600 dark:text-gray-300">
+                        {company.ruc}
+                      </TableCell>
                       <TableCell>
                         <div className="flex gap-2">
                           <Button
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDelete(company.id)}
-                            className="hover:bg-gray-700"
+                            className="hover:bg-gray-200 dark:hover:bg-gray-700"
                           >
                             <Trash2 className="h-4 w-4 text-red-500" />
                           </Button>

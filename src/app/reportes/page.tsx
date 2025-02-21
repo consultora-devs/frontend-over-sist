@@ -1,9 +1,10 @@
+"use client"
 import React from 'react'
 
 function Page() {
   return (
     <div>
-        <p>Reportes</p>
+      <h1>REPORTES</h1>
     </div>
   )
 }

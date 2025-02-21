@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Mail, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import Cookies from "js-cookie"; // Importa js-cookie
+import Cookies from "js-cookie";
 
 function Login() {
   const router = useRouter();
@@ -16,13 +16,10 @@ function Login() {
     e.preventDefault();
     setError("");
 
-    // Validación básica
     if (!email || !password) {
       setError("Por favor, completa todos los campos.");
       return;
     }
-
-    console.log("Haciendo solicitud con datos:", { email, password }); // Log para ver los datos antes de la solicitud
 
     try {
       const response = await fetch("http://127.0.0.1:8000/api/login", {
@@ -33,8 +30,6 @@ function Login() {
         body: JSON.stringify({ email, password }),
       });
 
-      console.log("Respuesta de la API:", response); // Log para ver la respuesta de la API
-
       if (!response.ok) {
         const data = await response.json();
         setError(data.message || "Error al iniciar sesión.");
@@ -42,13 +37,9 @@ function Login() {
       }
 
       const data = await response.json();
-      console.log("Inicio de sesión exitoso:", data);
 
-      // Almacenar el token en una cookie
-      Cookies.set('auth_token', data.token, { expires: 7 }); // El token se guardará por 7 días, puedes ajustarlo
-
-      // Redirigir a otra página después de iniciar sesión
-      router.push('/ordenes-de-servicio');
+      Cookies.set("auth_token", data.token, { expires: 7 });
+      router.push("/ordenes-de-servicio");
     } catch (err) {
       console.error("Error al realizar la solicitud:", err);
       setError("Ocurrió un error. Inténtalo de nuevo más tarde.");
@@ -56,9 +47,9 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white dark:bg-gray-900 flex items-center justify-center p-4">
       <div className="w-full max-w-md transform transition-all hover:scale-[1.01] duration-300">
-        <div className="rounded-lg shadow-xl p-8 space-y-8">
+        <div className="rounded-lg shadow-xl p-8 space-y-8 bg-white dark:bg-gray-800">
           {/* Header */}
           <div className="text-center">
             <div className="inline-flex items-center justify-center mb-4 transform hover:rotate-12 transition-transform duration-300">
@@ -67,12 +58,14 @@ function Login() {
                 alt="overhaul"
                 width={140}
                 height={140}
-                className="rounded-md p-2 bg-gray-50"
+                className="rounded-md p-2 bg-gray-50 dark:bg-gray-700"
                 priority
               />
             </div>
-            <h2 className="text-3xl font-bold mb-2">Bienvenido </h2>
-            <p>Ingresa a tu cuenta para iniciar sesión</p>
+            <h2 className="text-3xl font-bold mb-2 text-gray-900 dark:text-white">Bienvenido</h2>
+            <p className="text-gray-600 dark:text-gray-300">
+              Ingresa a tu cuenta para iniciar sesión
+            </p>
           </div>
 
           {error && (
@@ -82,7 +75,7 @@ function Login() {
           {/* Formulario */}
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium block">
+              <label htmlFor="email" className="text-sm font-medium block text-gray-900 dark:text-gray-300">
                 Correo electrónico
               </label>
               <div className="relative group">
@@ -94,14 +87,14 @@ function Login() {
                   id="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition-all duration-200"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition-all duration-200"
                   placeholder="nombre@ejemplo.com"
                 />
               </div>
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium block" >
+              <label htmlFor="password" className="text-sm font-medium block text-gray-900 dark:text-gray-300">
                 Contraseña
               </label>
               <div className="relative group">
@@ -113,7 +106,7 @@ function Login() {
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full pl-10 pr-3 py-2 border border-gray-700 rounded-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition-all duration-200"
+                  className="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-sm placeholder-gray-400 dark:placeholder-gray-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent transition-all duration-200"
                   placeholder="••••••••"
                   autoComplete=""
                 />
@@ -121,7 +114,7 @@ function Login() {
             </div>
             <button
               type="submit"
-              className="w-full flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-blue-800 hover:bg-gray-800 rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:-translate-y-0.5"
+              className="w-full flex justify-center items-center px-4 py-2 text-sm font-medium text-white bg-blue-800 hover:bg-blue-900 dark:hover:bg-blue-900 rounded-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200 transform hover:-translate-y-0.5"
             >
               Iniciar Sesión
             </button>
