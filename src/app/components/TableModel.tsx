@@ -9,11 +9,11 @@ export function TableModel({ data }: { data: Array<any> }) {
         const year = date.getFullYear(); // Año (4 dígitos)
         return `${day}/${month}/${year}`; // Formato d/m/Y
     };
+
     // Función para rellenar con ceros a la izquierda
     const padZeros = (value: any, length: number): string => {
         return String(value).padStart(length, '0'); // Rellenar con ceros hasta alcanzar la longitud deseada
     };
-
 
     // Procesar los datos
     const processedData = data.map(item => {
@@ -33,7 +33,6 @@ export function TableModel({ data }: { data: Array<any> }) {
         return processedItem;
     });
 
-    
     // Obtener las claves de los objetos (columnas de la tabla)
     const keys = processedData.length > 0 ? Object.keys(processedData[0]) : [];
 
@@ -48,8 +47,8 @@ export function TableModel({ data }: { data: Array<any> }) {
 
     return (
         <div className="relative overflow-x-auto mt-4 border max-h-[calc(100vh-180px)] dark:border-gray-600">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400 ">
-                <thead className="text-sm text-gray-900  bg-white dark:bg-gray-700 dark:text-gray-400">
+            <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400">
+                <thead className="text-sm text-gray-900 bg-white dark:bg-gray-700 dark:text-gray-400">
                     <tr>
                         <th scope="col" className="px-1 ps-2 py-0 border-b-2 border-gray-800 dark:border-gray-700">
                             Action
