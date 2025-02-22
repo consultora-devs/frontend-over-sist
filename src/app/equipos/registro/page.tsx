@@ -3,6 +3,7 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import InputEmpresa from '@/app/components/InputEmpresa';
+import Cookies from 'js-cookie';
 
 
 export interface FormData {
@@ -46,11 +47,17 @@ const CrearEquipoPage: React.FC = () => {
         Object.keys(data).forEach((key) => {
             formDataToSend.append(key, (data as any)[key]);
         });
+        //read token from cookie
+        const token = Cookies.get("auth_token");
 
         try {
             const response = await fetch('http://127.0.0.1:8000/api/equipos', {
                 method: 'POST',
                 body: formDataToSend,
+                headers: {
+                    "Authorization": `Bearer ${token}`,
+                    "Content-Type": "application/json",
+                  },
             });
 
             if (response.ok) {
@@ -67,7 +74,7 @@ const CrearEquipoPage: React.FC = () => {
 
 
     return (
-        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
             <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
                 <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
                     Registrar orden de servicio para equipo

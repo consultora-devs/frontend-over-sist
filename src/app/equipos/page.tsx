@@ -55,7 +55,7 @@ function App() {
   };
 
   return (
-    <div className="w-full container px-4">
+    <div className="w-full container h-full ">
       {error ? (
         <div className="error-message" style={{ color: 'red', padding: '10px', background: '#f8d7da', borderRadius: '5px' }}>
           {error}
