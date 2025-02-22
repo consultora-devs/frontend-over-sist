@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 
+
 function Sidevar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [rol, setRol] = useState<string | null>(null);
@@ -68,29 +69,37 @@ function Sidevar() {
 
       <aside
         id="logo-sidebar"
-        className={`fixed top-0 left-0 z-40 text-sm w-64 h-screen pt-16 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 ${isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          } sm:translate-x-0`} // Clase condicional para mostrar/ocultar el sidebar
+        className={`fixed top-0 left-0 z-40 text-sm w-64 h-screen pt-16 transition-transform bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700 ${
+          isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        } sm:translate-x-0`} // Clase condicional para mostrar/ocultar el sidebar
         aria-label="Sidebar"
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-            <div className='mb-3 mx-1 mt-2 shadow-sm'>
-              <table className='text-sm border w-full'>
-                <tr>
-                  <td className='px-1 border text-gray-600 font-semibold'>User</td>
-                  <td className='px-1 border text-gray-600'>{user_name}</td>
-                </tr>
-                <tr>
-                  <td className='px-1 border text-gray-600 font-semibold'>Rol</td>
-                  <td className='px-1 border text-gray-600'>{user_rol}</td>
-                </tr>
-              </table>
-            </div>
-          <ul className="space-y-2 font-medium">
-            <li>
-              <button
-                type="button"
-                className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
-                onClick={toggleAccordion} // Alternar el acordeón al hacer clic
+            
+          <ul className="space-y-2 flex flex-col justify-between h-full font-medium">
+            
+            <div>
+              <div className='mb-3 mx-1 mt-2 shadow-sm'>
+                <table className='text-sm border w-full'>
+                  <thead>
+                  <tr>
+                    <td className='px-1 border text-gray-600 font-semibold'>User</td>
+                    <td className='px-1 border text-gray-600'>{name_user}</td>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr>
+                    <td className='px-1 border text-gray-600 font-semibold'>Rol</td>
+                    <td className='px-1 border text-gray-600'>{rol}</td>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+              <li>
+                <button
+                  type="button"
+                  className="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                  onClick={toggleAccordion} // Alternar el acordeón al hacer clic
 
                 >
                   <svg className='text-gray-800 h-6 w-6' xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" strokeLinejoin="round" d="M5 11.5h4M5 9h6M5 6.5h6m-5.5-4h-2v12h9v-12h-2m-5-1h5l-.625 2h-3.75z" strokeWidth="1"/></svg>
