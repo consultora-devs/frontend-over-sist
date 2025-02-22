@@ -58,11 +58,11 @@ export function TableModel({ data }: { data: Array<any> }) {
             <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400 ">
                 <thead className="text-sm text-gray-900  bg-white dark:bg-gray-700 dark:text-gray-400">
                     <tr>
-                        <th scope="col" className="px-1 ps-2 py-0 border-b-2 border-gray-800 dark:border-gray-700">
+                        <th scope="col" className="px-1 ps-2 py-0 dark:text-gray-200 border-b-2 border-gray-800 dark:border-gray-700">
                             Action
                         </th>
                         {filteredKeys.map((key) => (
-                            <th key={key} scope="col" className="px-2 py-2 border-b-2 border-gray-800 border-l border-l-gray-200 dark:border-l-gray-600 text-nowrap dark:border-gray-700 font-semibold">
+                            <th key={key} scope="col" className="px-2 dark:text-gray-200 py-2 border-b-2 border-gray-800 border-l border-l-gray-200 dark:border-l-gray-600 text-nowrap dark:border-gray-700 font-semibold">
                                 {key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}
                             </th>
                         ))}
@@ -72,10 +72,10 @@ export function TableModel({ data }: { data: Array<any> }) {
                     {processedData.map((item, rowIndex) => (
                         <tr
                             key={String(item.id) || rowIndex} // Convertir 'id' a string o usar 'rowIndex' como fallback
-                            className="odd:bg-white hover:bg-gray-300 hover:text-gray-900 odd:dark:bg-gray-900 even:bg-gray-100 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
+                            className="odd:bg-white dark:text-gray-300 hover:dark:text-gray-900 hover:bg-gray-300 dark:hover:bg-gray-400 hover:text-gray-900 odd:dark:bg-gray-900 even:bg-gray-100 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
                         >
                             <td className="px-1.5 ps-2 py-1">
-                                <svg className='h-5 w-5 text-gray-700 cursor-pointer' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></g></svg>
+                                <svg className='h-5 w-5 text-gray-700 cursor-pointer dark:text-gray-500' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></g></svg>
                             </td>
                             {filteredKeys.map((key, colIndex) => (
                                 <td key={`${rowIndex}-${colIndex}`} className="px-2 text-[1em] py-1 dark:border-l-gray-600 border-l text-nowrap">
