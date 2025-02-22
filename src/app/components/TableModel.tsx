@@ -9,6 +9,7 @@ export function TableModel({ data }: { data: Array<any> }) {
         const year = date.getFullYear(); // Año (4 dígitos)
         return `${day}/${month}/${year}`; // Formato d/m/Y
     };
+
     // Función para rellenar con ceros a la izquierda
     const padZeros = (value: any, length: number): string => {
         return String(value).padStart(length, '0'); // Rellenar con ceros hasta alcanzar la longitud deseada
@@ -25,6 +26,12 @@ export function TableModel({ data }: { data: Array<any> }) {
         }
         if (processedItem.fecha_facturacion) {
             processedItem.fecha_facturacion = formatDate(processedItem.fecha_facturacion);
+        }
+        if(processedItem.created_at){
+            processedItem.created_at = formatDate(processedItem.created_at);
+        }
+        if(processedItem.updated_at){
+            processedItem.updated_at = formatDate(processedItem.updated_at);
         }
         if (processedItem.id_orden_servicio) {
             processedItem.id_orden_servicio = padZeros(processedItem.id_orden_servicio, 5);

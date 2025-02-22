@@ -1,7 +1,7 @@
 
 import Sidevar from "@/app/components/sidebar"
 
-export default function EmpresasLayout({
+export default function EquiposLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

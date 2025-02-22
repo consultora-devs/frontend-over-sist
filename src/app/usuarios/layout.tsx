@@ -1,7 +1,6 @@
-
 import Sidevar from "@/app/components/sidebar"
 
-export default function EmpresasLayout({
+export default function UsersLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
@@ -9,7 +8,7 @@ export default function EmpresasLayout({
     return (
         <div className=''>
             <Sidevar />
-            <div className="py-16 sm:ml-64">
+            <div className="py-12 sm:ml-64">
                 {children}
             </div>
 
