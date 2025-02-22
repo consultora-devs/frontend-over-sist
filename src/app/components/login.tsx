@@ -71,14 +71,20 @@ function Login() {
         }
 
         const userData = await userResponse.json();
+        //console.log("data obtenido de api me:", userData);
+        //console.log("data obtenido de api me nombre:", userData.user.name);
+        //console.log("usuario rol:", userData.roles[0]);
 
         // Guardar el rol y el nombre del usuario en las cookies
         Cookies.set("rol", userData.roles[0], { expires: 7 });
         Cookies.set("user_name", userData.user.name, { expires: 7 });
+
+        
       }
 
       // Redirigir al usuario a la página de equipos
       router.push("/equipos");
+
     } catch (err) {
       console.error("Error al realizar la solicitud:", err);
       setError("Ocurrió un error. Inténtalo de nuevo más tarde.");
