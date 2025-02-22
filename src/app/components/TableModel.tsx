@@ -26,6 +26,12 @@ export function TableModel({ data }: { data: Array<any> }) {
         if (processedItem.fecha_facturacion) {
             processedItem.fecha_facturacion = formatDate(processedItem.fecha_facturacion);
         }
+        if(processedItem.created_at){
+            processedItem.created_at = formatDate(processedItem.created_at);
+        }
+        if(processedItem.updated_at){
+            processedItem.updated_at = formatDate(processedItem.updated_at);
+        }
         if (processedItem.id_orden_servicio) {
             processedItem.id_orden_servicio = padZeros(processedItem.id_orden_servicio, 5);
         }
@@ -64,9 +70,11 @@ export function TableModel({ data }: { data: Array<any> }) {
                     {processedData.map((item, rowIndex) => (
                         <tr
                             key={String(item.id) || rowIndex} // Convertir 'id' a string o usar 'rowIndex' como fallback
-                            className="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-100 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
+                            className="odd:bg-white hover:bg-gray-300 hover:text-gray-900 odd:dark:bg-gray-900 even:bg-gray-100 even:dark:bg-gray-800 border-b dark:border-gray-700 border-gray-200"
                         >
-                            <td className="px-1.5 ps-2 py-1">Actions</td>
+                            <td className="px-1.5 ps-2 py-1">
+                                <svg className='h-5 w-5 text-gray-700 cursor-pointer' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 25"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z"/></g></svg>
+                            </td>
                             {filteredKeys.map((key, colIndex) => (
                                 <td key={`${rowIndex}-${colIndex}`} className="px-2 text-[1em] py-1 dark:border-l-gray-600 border-l text-nowrap">
                                     {item[key]}

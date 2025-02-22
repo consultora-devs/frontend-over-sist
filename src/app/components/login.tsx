@@ -53,7 +53,7 @@ function Login() {
 
       // Guardar el token en las cookies
       Cookies.set("auth_token", data.token, { expires: 7 });
-
+      
       // Obtener información del usuario autenticado
       if (data.token) {
         const userResponse = await fetch(`${endpoint}/api/me`, {
