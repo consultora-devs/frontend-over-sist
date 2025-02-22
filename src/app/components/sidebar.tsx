@@ -2,9 +2,14 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import Cookies from 'js-cookie';
 
 function Sidevar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false); // Estado para controlar la visibilidad del sidebar
+  const [rol, setRol] = useState<string | null>(null); // Estado para manejar errores
+
+  const user_rol = Cookies.get('rol'); // Obtener token de la cookie
+  const user_name = Cookies.get('user_name'); // Obtener token de la cookie
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen); // Alternar la visibilidad del sidebar
@@ -65,9 +70,17 @@ function Sidevar() {
         aria-label="Sidebar"
       >
         <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-            <div className='px-5 mb-3 mt-2'>
-                <p>Usuario:</p>
-                <p>Rol:</p>
+            <div className='mb-3 mx-1 mt-2 shadow-sm'>
+              <table className='text-sm border w-full'>
+                <tr>
+                  <td className='px-1 border text-gray-600 font-semibold'>User</td>
+                  <td className='px-1 border text-gray-600'>{user_name}</td>
+                </tr>
+                <tr>
+                  <td className='px-1 border text-gray-600 font-semibold'>Rol</td>
+                  <td className='px-1 border text-gray-600'>{user_rol}</td>
+                </tr>
+              </table>
             </div>
           <ul className="space-y-2 font-medium">
             <li>

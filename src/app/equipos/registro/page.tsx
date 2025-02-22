@@ -76,7 +76,7 @@ const CrearEquipoPage: React.FC = () => {
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
             <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
+                <h2 className="text-xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
                     Registrar orden de servicio para equipo
                 </h2>
                 <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -98,8 +98,6 @@ const CrearEquipoPage: React.FC = () => {
                     <div className='flex flex-col'>
                         <InputEmpresa className="" setValue={setValue} />
                     </div>
-
-
 
                     {/* RUC */}
                     <div className="flex flex-col">

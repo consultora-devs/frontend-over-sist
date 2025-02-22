@@ -31,7 +31,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={darkMode ? "dark" : ""}>
-      <body className="bg-white dark:bg-gray-800 transition-colors duration-300">
+      <body className="bg-gray-50 dark:bg-gray-800 transition-colors duration-300 min-h-screen">
 
         <Providers>
           <div className="w-full flex flex-col">

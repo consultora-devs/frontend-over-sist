@@ -12,10 +12,12 @@ h1, h2, h3 {
     font-family: 'Inter', sans-serif;
     font-weight: 600;
 }
-
+button{
+    font-family: 'calibri' ;
+}
 /* Tablas */
 table {
-font-family: 'Roboto Mono', monospace;
+font-family: 'calibri' ;
 font-size: 14px;
 line-height: 1.2;
 }

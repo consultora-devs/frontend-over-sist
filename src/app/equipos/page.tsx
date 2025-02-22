@@ -4,6 +4,7 @@ import { TableData } from './types';
 import Cookies from 'js-cookie';
 import { TableModel } from '../components/TableModel';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 function App() {
   const [data, setData] = useState<Array<any>>([]);
@@ -60,8 +61,12 @@ function App() {
       ) : null}
 
       <div className='mt-6 w-full '>
-        <span className='font-bold text-lg'>Equipos</span>
-
+        <div className='flex justify-between'>
+          <span className='font-bold text-lg'>Equipos</span>
+          <Link href="/equipos/registro">
+            <button type="button" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo registro</button>
+          </Link>
+        </div>
         {/* Mostrar indicador de carga mientras se obtienen los datos */}
         {loading ? (
           <div className="flex justify-center items-center h-64">
