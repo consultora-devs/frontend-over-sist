@@ -16,6 +16,7 @@ function Sidevar() {
     setNameUser(user_name || null);
   }, []);
 
+  
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
