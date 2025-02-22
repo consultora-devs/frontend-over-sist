@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 
+
 function Sidevar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [rol, setRol] = useState<string | null>(null);
