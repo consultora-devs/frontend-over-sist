@@ -1,15 +1,12 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { TableData } from './types';
 import Cookies from 'js-cookie';
 import { TableModel } from '../components/TableModel';
-import { useRouter } from 'next/navigation';
 
 function App() {
   const [data, setData] = useState<Array<any>>([]);
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
-  const router = useRouter(); // Hook para redireccionar
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,7 +15,7 @@ function App() {
 
       try {
         const token = Cookies.get('auth_token'); // Obtener token de la cookie
-        const response = await fetch('http://127.0.0.1:8000/api/equipos', {
+        const response = await fetch('http://127.0.0.1:8000/api/personas', {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Incluir token en el encabezado
@@ -27,19 +24,11 @@ function App() {
         });
         
         if (!response.ok) {
-          if (response.status === 401) {
-            // Si el token no es válido, borrar el token y redirigir al login
-            Cookies.remove('auth_token'); // Borrar el token
-            router.push('/login'); // Redirigir al usuario a la página de inicio de sesión
-            return; // Salir de la función
-          }
           throw new Error('Error fetching data'); // Lanzar un error si la respuesta no es exitosa
         }
 
         const result = await response.json();
         setData(result.data); // Asignar los datos al estado
-
-        
       } catch (error: any) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
@@ -59,8 +48,8 @@ function App() {
         </div>
       ) : null}
 
-      <div className='mt-6 w-full '>
-        <span className='font-bold text-lg'>Equipos</span>
+      <div className='mt-6 w-full'>
+        <span className='font-bold text-lg'>Personas</span>
 
         {/* Mostrar indicador de carga mientras se obtienen los datos */}
         {loading ? (

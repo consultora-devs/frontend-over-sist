@@ -39,7 +39,7 @@ function Login() {
       const data = await response.json();
 
       Cookies.set("auth_token", data.token, { expires: 7 });
-      router.push("/ordenes-de-servicio");
+      router.push("/equipos");
     } catch (err) {
       console.error("Error al realizar la solicitud:", err);
       setError("Ocurrió un error. Inténtalo de nuevo más tarde.");

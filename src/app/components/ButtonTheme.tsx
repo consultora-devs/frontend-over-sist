@@ -7,7 +7,7 @@ const ButtonTheme = ({ darkMode, toggleTheme }: { darkMode: boolean, toggleTheme
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 m-3 text-white bg-gray-800 dark:bg-gray-200 rounded-full fixed right-4 top-4 transform -translate-y-1/2 focus:outline-none z-50"
+      className="p-2 m-3 text-white bg-gray-800 dark:bg-gray-200 rounded-full fixed right-4 top-4 transform -translate-y-1/2 focus:outline-none z-[100]"
     >
       {darkMode ? (
         <SunIcon className="h-6 w-6 text-yellow-500" />
