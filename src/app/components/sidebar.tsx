@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 
-
 function Sidevar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [rol, setRol] = useState<string | null>(null);
@@ -146,7 +145,7 @@ function Sidevar() {
               {/* Otros elementos del menú */}
               <li>
                   <Link href="/reportes" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                  <svg className='text-gray-600 h-6 w-6 dark:text-gray-400' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path stroke-dasharray="64" stroke-dashoffset="64" d="M13 3l6 6v12h-14v-18h8"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.6s" values="64;0"/></path><path stroke-dasharray="14" stroke-dashoffset="14" strokeWidth="1" d="M12.5 3v5.5h6.5"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.7s" dur="0.2s" values="14;0"/></path><path stroke-dasharray="4" stroke-dashoffset="4" d="M9 17v-3"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.9s" dur="0.2s" values="4;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 17v-4"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1.1s" dur="0.2s" values="6;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M15 17v-5"><animate fill="freeze" attributeName="stroke-dashoffset" begin="1.3s" dur="0.2s" values="6;0"/></path></g></svg>
+                  <svg className='text-gray-600 h-6 w-6 dark:text-gray-400' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"><path strokeDasharray="64" strokeDashoffset="64" d="M13 3l6 6v12h-14v-18h8"><animate fill="freeze" attributeName="strokeDashoffset" dur="0.6s" values="64;0"/></path><path strokeDasharray="14" strokeDashoffset="14" strokeWidth="1" d="M12.5 3v5.5h6.5"><animate fill="freeze" attributeName="strokeDashoffset" begin="0.7s" dur="0.2s" values="14;0"/></path><path strokeDasharray="4" strokeDashoffset="4" d="M9 17v-3"><animate fill="freeze" attributeName="strokeDashoffset" begin="0.9s" dur="0.2s" values="4;0"/></path><path strokeDasharray="6" strokeDashoffset="6" d="M12 17v-4"><animate fill="freeze" attributeName="strokeDashoffset" begin="1.1s" dur="0.2s" values="6;0"/></path><path strokeDasharray="6" strokeDashoffset="6" d="M15 17v-5"><animate fill="freeze" attributeName="strokeDashoffset" begin="1.3s" dur="0.2s" values="6;0"/></path></g></svg>
                       <span className="flex-1 ms-2 dark:text-gray-200 whitespace-nowrap">Reportes</span>
                   </Link>
               </li>

@@ -1,9 +1,11 @@
 import React from 'react'
 
-function Page() {
+function PageEdit() {
   return (
-    <div>Page</div>
+    <div className='bg-gray-950 flex justify-center items-center h-screen'>
+      <p>Page for edit </p>
+    </div>
   )
 }
 
-export default Page
+export default PageEdit

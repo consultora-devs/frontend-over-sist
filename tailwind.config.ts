@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
-import {heroui} from "@heroui/react";
+import { heroui } from "@heroui/react";
+import flowbite from 'flowbite/plugin';
 
 export default {
   content: [
@@ -19,8 +20,6 @@ export default {
   darkMode: "class",
   plugins: [
     heroui(),
-    require('flowbite/plugin')
+    flowbite,
   ]
-
-
 } satisfies Config;

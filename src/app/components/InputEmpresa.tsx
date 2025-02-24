@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
 import { UseFormSetValue } from 'react-hook-form';
-import { FormData } from '@/app/equipos/registro/page';
 
+import { FormData } from '@/app/equipos/editar/[id]/page';
 
 
 interface PropsInput {
