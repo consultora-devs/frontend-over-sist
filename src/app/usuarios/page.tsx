@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 function App() {
-  const [data, setData] = useState<Array<any>>([]);
+  const [data, setData] = useState<Array<any>>([]);// Estado para manejar los datos de la tabla 
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
@@ -26,9 +26,9 @@ function App() {
           },
         });
         
+        //si la respuesta no es exitosa y el status es 401, redirigir al login y borrar el token de la cookie 
         if (!response.ok) {
           if (response.status === 401) {
-            // Si el token no es válido, borrar el token y redirigir al login
             Cookies.remove('auth_token'); // Borrar el token
             router.push('/login'); // Redirigir al usuario a la página de inicio de sesión
             return; // Salir de la función
@@ -37,7 +37,7 @@ function App() {
         }
 
         const result = await response.json();
-        setData(result); // Asignar los datos al estado
+        setData(result); // Asignar los datos al estado de datos para mostralos en la tabla 
 
         
       } catch (error: any) {
