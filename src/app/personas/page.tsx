@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { TableModel } from '../components/TableModel';
+import Link from 'next/link';
 
 function App() {
   const [data, setData] = useState<Array<any>>([]);
@@ -49,7 +50,12 @@ function App() {
       ) : null}
 
       <div className='mt-6 w-full'>
-        <span className='font-bold text-lg'>Personas</span>
+      <div className='flex justify-between'>
+          <span className='font-bold text-lg'>Personas</span>
+          <Link href="/personas/registro">
+            <button type="button" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo registro</button>
+          </Link>
+        </div>
 
         {/* Mostrar indicador de carga mientras se obtienen los datos */}
         {loading ? (
@@ -58,7 +64,7 @@ function App() {
           </div>
         ) : (
           // Mostrar la tabla solo cuando los datos estén listos
-          <TableModel data={data} />
+          <TableModel data={data} nameTable={"personas"}/>  
         )}
       </div>
     </div>

@@ -79,7 +79,7 @@ function App() {
           </div>
         ) : (
           // Mostrar la tabla solo cuando los datos estén listos
-          <TableModel data={data} />
+          <TableModel data={data} nameTable={"certificadores"}/>
         )}
       </div>
     </div>
