@@ -104,7 +104,7 @@ function Sidevar() {
                 >
                   <svg className='text-gray-800 dark:text-gray-400 h-6 w-6' xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 16 16"><path fill="none" stroke="currentColor" strokeLinejoin="round" d="M5 11.5h4M5 9h6M5 6.5h6m-5.5-4h-2v12h9v-12h-2m-5-1h5l-.625 2h-3.75z" strokeWidth="1"/></svg>
                   <span className="flex-1 ms-2 dark:text-gray-200 text-left text-sm rtl:text-right whitespace-nowrap">
-                    Ordenes de servicio
+                    Ordenes de trabajo
                   </span>
                   <svg
                       className={`w-3 h-3 me-2 transition-transform ${
