@@ -33,8 +33,8 @@ export function TableModel({ data, nameTable }: { data: Array<any>; nameTable: s
         if(processedItem.updated_at){
             processedItem.updated_at = formatDate(processedItem.updated_at);
         }
-        if (processedItem.id_orden_servicio) {
-            processedItem.id_orden_servicio = padZeros(processedItem.id_orden_servicio, 5);
+        if (processedItem.id_orden_trabajo) {
+            processedItem.id_orden_trabajo = padZeros(processedItem.id_orden_trabajo, 5);
         }
 
         return processedItem;
@@ -47,8 +47,8 @@ export function TableModel({ data, nameTable }: { data: Array<any>; nameTable: s
     const filteredKeys = keys
         .filter((key) => key !== "id") // Excluir 'id'
         .sort((a, b) => {
-            if (a === 'id_orden_servicio') return -1; // Colocar 'id_orden_servicio' al principio
-            if (b === 'id_orden_servicio') return 1;
+            if (a === 'id_orden_trabajo') return -1; // Colocar 'id_orden_servicio' al principio
+            if (b === 'id_orden_trabajo') return 1;
             return 0;
         });
 
