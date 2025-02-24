@@ -10,14 +10,14 @@ export interface FormData {
   empresa: string;
   ruc: string;
   inspector: string;
-  f_servicio: string;
+  fecha_servicio: string;
   certificadora: string;
   tipo_unidad: string;
   placa: string;
   area: string;
   dias_transcurridos: number;
-  Departamento: string;
-  Provincia: string;
+  departamento: string;
+  provincia: string;
   n_factura: string;
   dias_transc: number;
   costo_sin_igv: number;
@@ -149,18 +149,18 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("f_servicio", tokenRole) && (
+          {isFieldVisible("fecha_servicio", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="f_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
+              <label htmlFor="fecha_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
                 Fecha de Servicio
               </label>
               <input
-                id="f_servicio"
+                id="fecha_servicio"
                 type="date"
-                {...register("f_servicio", { required: "Este campo es obligatorio" })}
+                {...register("fecha_servicio", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.f_servicio && <span className="text-red-500 text-sm">{errors.f_servicio.message}</span>}
+              {errors.fecha_servicio && <span className="text-red-500 text-sm">{errors.fecha_servicio.message}</span>}
             </div>
           )}
 
@@ -260,35 +260,35 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("Departamento", tokenRole) && (
+          {isFieldVisible("departamento", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="Departamento" className="mb-2 text-gray-700 dark:text-gray-200">
+              <label htmlFor="departamento" className="mb-2 text-gray-700 dark:text-gray-200">
                 Departamento
               </label>
               <input
-                id="Departamento"
+                id="departamento"
                 type="text"
                 placeholder="Ingrese departamento"
-                {...register("Departamento", { required: "Este campo es obligatorio" })}
+                {...register("departamento", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.Departamento && <span className="text-red-500 text-sm">{errors.Departamento.message}</span>}
+              {errors.departamento && <span className="text-red-500 text-sm">{errors.departamento.message}</span>}
             </div>
           )}
 
-          {isFieldVisible("Provincia", tokenRole) && (
+          {isFieldVisible("provincia", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="Provincia" className="mb-2 text-gray-700 dark:text-gray-200">
-                Provincia
+              <label htmlFor="provincia" className="mb-2 text-gray-700 dark:text-gray-200">
+                provincia
               </label>
               <input
-                id="Provincia"
+                id="provincia"
                 type="text"
                 placeholder="Ingrese provincia"
-                {...register("Provincia", { required: "Este campo es obligatorio" })}
+                {...register("provincia", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.Provincia && <span className="text-red-500 text-sm">{errors.Provincia.message}</span>}
+              {errors.provincia && <span className="text-red-500 text-sm">{errors.provincia.message}</span>}
             </div>
           )}
 
