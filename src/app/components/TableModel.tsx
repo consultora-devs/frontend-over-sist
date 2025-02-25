@@ -27,6 +27,9 @@ export function TableModel({ data, nameTable }: { data: Array<any>; nameTable: s
         if (processedItem.fecha_facturacion) {
             processedItem.fecha_facturacion = formatDate(processedItem.fecha_facturacion);
         }
+        if (processedItem.fecha_factura) {
+            processedItem.fecha_factura = formatDate(processedItem.fecha_factura);
+        }
         if(processedItem.created_at){
             processedItem.created_at = formatDate(processedItem.created_at);
         }
@@ -49,6 +52,8 @@ export function TableModel({ data, nameTable }: { data: Array<any>; nameTable: s
         .sort((a, b) => {
             if (a === 'id_orden_trabajo') return -1; // Colocar 'id_orden_servicio' al principio
             if (b === 'id_orden_trabajo') return 1;
+            if (a === 'n_orden_servicio') return -1; // Colocar 'id_orden_servicio' al principio
+            if (b === 'n_orden_servicio') return 1;
             return 0;
         });
 

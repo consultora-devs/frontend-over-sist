@@ -12,6 +12,14 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
 
+  const [rol, setRol] = useState<string | null>(null);
+
+  useEffect(() => {
+    const user_rol = Cookies.get('rol');
+    setRol(user_rol || null);
+  }, []);
+
+
   useEffect(() => {
     const fetchData = async () => {
       setError(null); // Limpiar el error anterior, si lo hay
@@ -63,9 +71,11 @@ function App() {
       <div className='mt-6 w-full '>
         <div className='flex justify-between'>
           <span className='font-bold text-lg'>Equipos</span>
-          <Link href="/equipos/registro">
-            <button type="button" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo registro</button>
-          </Link>
+          {rol === "administrador" || rol === "inspector" && (
+            <Link href="/equipos/registro">
+              <button type="button" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo registro</button>
+            </Link>
+          )}
         </div>
 
         {loading ? (

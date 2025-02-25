@@ -173,7 +173,7 @@ const EditEquipoPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
       <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
-          Actualizar orden de trabajo para equipo
+          Actualizar orden de servicio para equipo
         </h2>
 
         {message && (
