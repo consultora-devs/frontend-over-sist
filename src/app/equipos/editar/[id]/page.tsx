@@ -31,7 +31,9 @@ export interface FormData {
   pago_detraccion: number;
   costo_dolares: number;
   socio: string;
+  n_orden_servicio?: string | null;
 }
+
 
 const EditEquipoPage: React.FC = () => {
   const {
@@ -109,25 +111,25 @@ const EditEquipoPage: React.FC = () => {
   }, [equipoId, setValue]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const formDataToSend = new FormData();
-    Object.keys(data).forEach((key) => {
-      const value = (data as any)[key];
-      if (value !== undefined && value !== null) {
-        formDataToSend.append(key, value.toString());
-      }
-    });
-
+    // Construimos el payload, forzando n_orden_servicio como null
+    const payload = {
+      ...data,
+      n_orden_servicio: null,
+    };
+  
     const token = Cookies.get("auth_token");
-
+    setLoading(true); // Inicia el loading
+  
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/equipos/${equipoId}`, {
         method: 'PUT',
-        body: formDataToSend,
         headers: {
           "Authorization": `Bearer ${token}`,
+          "Content-Type": "application/json", // Indicamos que se envía JSON
         },
+        body: JSON.stringify(payload), // Enviamos el payload en formato JSON
       });
-
+  
       if (response.ok) {
         setMessage('Registro actualizado exitosamente');
       } else {
@@ -137,8 +139,11 @@ const EditEquipoPage: React.FC = () => {
     } catch (error) {
       console.error('Error al guardar:', error);
       setMessage(error instanceof Error ? error.message : 'Ocurrió un error al actualizar');
+    } finally {
+      setLoading(false); // Detenemos el loading
     }
   };
+  
 
   const tokenRole = Cookies.get("rol");
 
@@ -161,13 +166,7 @@ const EditEquipoPage: React.FC = () => {
     return false;
   };
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 dark:border-gray-300"></div>
-      </div>
-    );
-  }
+
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
@@ -523,6 +522,7 @@ const EditEquipoPage: React.FC = () => {
             </div>
           )}
 
+          {/* Loading effect on the submit button */}
           <div className="md:col-span-2 flex justify-end space-x-4">
             <button
               type="button"
@@ -533,9 +533,14 @@ const EditEquipoPage: React.FC = () => {
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              disabled={loading} // Disable the button when loading
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center"
             >
-              Guardar
+              {loading ? (
+                <div className="spinner-border animate-spin border-t-2 border-b-2 border-white w-4 h-4 mr-2"></div>
+              ) : (
+                'Guardar'
+              )}
             </button>
           </div>
         </form>
