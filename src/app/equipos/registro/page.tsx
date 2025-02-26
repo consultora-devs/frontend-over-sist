@@ -3,6 +3,7 @@
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import InputEmpresa from '@/app/components/InputEmpresa';
+import AreaSelector from '@/app/components/AreaSelector';
 import Cookies from 'js-cookie';
 
 export interface FormData {
@@ -114,6 +115,11 @@ const CrearEquipoPage: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div className="flex flex-col">
+            <InputEmpresa className="" setValue={setValue} />
+          </div>
+
           {isFieldVisible("empresa_matriz", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="empresa_matriz" className="mb-2 text-gray-700 dark:text-gray-200">
@@ -129,9 +135,7 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          <div className="flex flex-col">
-            <InputEmpresa className="" setValue={setValue} />
-          </div>
+          
 
           {isFieldVisible("ruc", tokenRole) && (
             <div className="flex flex-col">
@@ -212,37 +216,8 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("area", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="area" className="mb-2 text-gray-700 dark:text-gray-200">
-                Área
-              </label>
-              <input
-                id="area"
-                type="text"
-                placeholder="Ingrese área"
-                {...register("area", { required: "Este campo es obligatorio" })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.area && <span className="text-red-500 text-sm">{errors.area.message}</span>}
-            </div>
-          )}
-
-          {isFieldVisible("dias_transcurridos", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="dias_transcurridos" className="mb-2 text-gray-700 dark:text-gray-200">
-                Días Transcurridos
-              </label>
-              <input
-                id="dias_transcurridos"
-                type="number"
-                placeholder="Ingrese días transcurridos"
-                {...register("dias_transcurridos", { required: "Este campo es obligatorio", valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.dias_transcurridos && <span className="text-red-500 text-sm">{errors.dias_transcurridos.message}</span>}
-            </div>
-          )}
+          {/* Componente AreaSelector */}
+          <AreaSelector register={register} errors={errors} />
 
           {isFieldVisible("inspector", tokenRole) && (
             <div className="flex flex-col">

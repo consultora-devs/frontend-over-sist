@@ -2,11 +2,8 @@
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-
 import { UseFormSetValue } from 'react-hook-form';
-
 import { FormData } from '@/app/equipos/editar/[id]/page';
-
 
 interface PropsInput {
   className: string;
@@ -14,8 +11,20 @@ interface PropsInput {
 }
 
 function InputEmpresa({ className, setValue }: PropsInput) {
-  const [empresas, setEmpresas] = useState<{ value: string; label: string; ruc: string }[]>([]);
-  const [selectedEmpresa, setSelectedEmpresa] = useState<{ value: string; label: string } | null>(null);
+  const [empresas, setEmpresas] = useState<{ 
+    value: string; 
+    label: string; 
+    ruc: string; 
+    empresa_matriz: string;
+  }[]>([]);
+  
+  const [selectedEmpresa, setSelectedEmpresa] = useState<{ 
+    value: string; 
+    label: string; 
+    ruc: string; 
+    empresa_matriz: string;
+  } | null>(null);
+  
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -26,7 +35,7 @@ function InputEmpresa({ className, setValue }: PropsInput) {
     const fetchEmpresas = async () => {
       const token = Cookies.get("auth_token");
 
-      const response = await fetch("http://127.0.0.1:8000/api/empresas", {
+      const response = await fetch("http://127.0.0.1:8000/api/empresas_asociadas", {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,
@@ -40,10 +49,18 @@ function InputEmpresa({ className, setValue }: PropsInput) {
       }
 
       const data = await response.json();
-      const empresasOptions = data.map((empresa: { id: string, razon_social: string, ruc: string }) => ({
-        value: empresa.id,
-        label: empresa.razon_social,
-        ruc: empresa.ruc
+
+      // Adaptar los datos al formato del API
+      const empresasOptions = data.map((empresa: { 
+        id_empresa_asociada: string; 
+        empresa_asociada: string; 
+        ruc_empresa_asociada: string; 
+        nombre_empresa_matriz: string;
+      }) => ({
+        value: empresa.id_empresa_asociada,  // ID correcto
+        label: empresa.empresa_asociada, 
+        ruc: empresa.ruc_empresa_asociada,
+        empresa_matriz: empresa.nombre_empresa_matriz, // Nombre de la empresa matriz
       }));
 
       setEmpresas(empresasOptions);
@@ -55,12 +72,10 @@ function InputEmpresa({ className, setValue }: PropsInput) {
   useEffect(() => {
     if (selectedEmpresa) {
       setValue('empresa', selectedEmpresa.value);
-      const empresaSeleccionada = empresas.find(e => e.value === selectedEmpresa.value);
-      if (empresaSeleccionada) {
-        setValue("ruc", empresaSeleccionada.ruc);
-      }
+      setValue('ruc', selectedEmpresa.ruc);
+      setValue('empresa_matriz', selectedEmpresa.empresa_matriz); // Asegurar actualización
     }
-  }, [selectedEmpresa, setValue, empresas]);
+  }, [selectedEmpresa, setValue]);
 
   const customStyles = {
     control: (base: any) => ({
@@ -112,9 +127,14 @@ function InputEmpresa({ className, setValue }: PropsInput) {
           id="empresa"
           options={empresas}
           value={selectedEmpresa}
-          onChange={(selectedOption) => setSelectedEmpresa(selectedOption)}
+          onChange={(selectedOption) => {
+            const empresaSeleccionada = empresas.find(e => e.value === selectedOption?.value);
+            if (empresaSeleccionada) {
+              setSelectedEmpresa(empresaSeleccionada);
+            }
+          }}
           classNamePrefix="react-select"
-          placeholder="buscar o seleccionar"
+          placeholder="Buscar o seleccionar"
           className="text-white"
           styles={customStyles}
         />
