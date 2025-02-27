@@ -5,7 +5,6 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import InputEmpresa from '@/app/components/InputEmpresa';
 import Cookies from 'js-cookie';
 import { useParams } from 'next/navigation';
-import { Textarea } from '@heroui/react';
 
 export interface FormData {
   empresa_matriz: string;
@@ -35,7 +34,6 @@ export interface FormData {
   n_orden_servicio?: string | null;
   descripcion_servicio: string;
   repuestos: string;
-
 }
 
 
@@ -98,7 +96,7 @@ const EditEquipoPage: React.FC = () => {
           setValue('costo_mas_igv', equipoData.costo_mas_igv || 0);
           setValue('igv_pagar', equipoData.igv_pagar || 0);
           setValue('detraccion', equipoData.detraccion || 0);
-          setValue('comentarios', equipoData.comentario || '');
+          setValue('comentarios', equipoData.comentarios || '');
           setValue('verificado_factura', equipoData.verificado_factura || 'no');
           setValue('verificado_pago', equipoData.verificado_pago || 'no');
           setValue('pago_detraccion', equipoData.pago_detraccion || 0);
@@ -563,12 +561,10 @@ const EditEquipoPage: React.FC = () => {
           {isFieldVisible("comentarios", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="comentarios" className="mb-2 text-gray-700 dark:text-gray-200">
-                comentario
+                comentarios
               </label>
-              <input
+              <textarea
                 id="comentarios"
-                type="text"
-                step="0.01"
                 placeholder="Ingrese comentarios"
                 {...register("comentarios", { valueAsNumber: true })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"

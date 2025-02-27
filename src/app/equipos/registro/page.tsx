@@ -36,7 +36,6 @@ export interface FormData {
   n_orden_servicio?: string | null;
   descripcion_servicio: string;
   repuestos: string;
-
 }
 
 const CrearEquipoPage: React.FC = () => {
@@ -165,23 +164,23 @@ const CrearEquipoPage: React.FC = () => {
 
 
 
-          
-            <div className="flex flex-col">
-              <label htmlFor="ruc" className="mb-2 text-gray-700 dark:text-gray-200">
-                RUC
-              </label>
-              <input
-                id="ruc"
-                type="text"
-                placeholder="Ingrese RUC"
-                {...register("ruc", { required: "Este campo es obligatorio" })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.ruc && <span className="text-red-500 text-sm">{errors.ruc.message}</span>}
-            </div>
-          
 
-          
+          <div className="flex flex-col">
+            <label htmlFor="ruc" className="mb-2 text-gray-700 dark:text-gray-200">
+              RUC
+            </label>
+            <input
+              id="ruc"
+              type="text"
+              placeholder="Ingrese RUC"
+              {...register("ruc", { required: "Este campo es obligatorio" })}
+              className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+            />
+            {errors.ruc && <span className="text-red-500 text-sm">{errors.ruc.message}</span>}
+          </div>
+
+
+
           {isFieldVisible("repuestos", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="repuestos" className="mb-2 text-gray-700 dark:text-gray-200">
@@ -261,7 +260,7 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("area", tokenRole) && (
+          {/* {isFieldVisible("area", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="area" className="mb-2 text-gray-700 dark:text-gray-200">
                 Área
@@ -275,7 +274,12 @@ const CrearEquipoPage: React.FC = () => {
               />
               {errors.area && <span className="text-red-500 text-sm">{errors.area.message}</span>}
             </div>
+          )} */}
+          {isFieldVisible("area", tokenRole) && (
+            <AreaSelector register={register} errors={errors} />
           )}
+
+ 
 
           {isFieldVisible("inspector", tokenRole) && (
             <div className="flex flex-col">
@@ -489,12 +493,12 @@ const CrearEquipoPage: React.FC = () => {
           {isFieldVisible("comentarios", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="comentarios" className="mb-2 text-gray-700 dark:text-gray-200">
-                comentario
+                comentarios
               </label>
-              <input
+              <textarea
                 id="comentarios"
-                type="text"
-                step="0.01"
+                
+                
                 placeholder="Ingrese comentarios"
                 {...register("comentarios", { valueAsNumber: true })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -504,7 +508,7 @@ const CrearEquipoPage: React.FC = () => {
               )}
             </div>
           )}
-          
+
           {isFieldVisible("descripcion_servicio", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="descripcion_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
@@ -512,7 +516,7 @@ const CrearEquipoPage: React.FC = () => {
               </label>
               <textarea
                 id="descripcion_servicio"
-                
+
                 placeholder="Ingrese Descripcion del servicio"
                 {...register("descripcion_servicio", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
