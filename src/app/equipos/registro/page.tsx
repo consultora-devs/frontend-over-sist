@@ -5,7 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import InputEmpresa from '@/app/components/InputEmpresa';
 import AreaSelector from '@/app/components/AreaSelector';
 import Cookies from 'js-cookie';
-
+import { useRouter } from 'next/navigation';
 export interface FormData {
   empresa_matriz: string;
   empresa: string;
@@ -35,7 +35,7 @@ export interface FormData {
 
 const CrearEquipoPage: React.FC = () => {
   const { setValue, register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
-
+  const router = useRouter(); // Hook para redireccionar
 
   const [message, setMessage] = React.useState<string>(''); // State for success/error messages
   const [loading, setLoading] = React.useState<boolean>(false); // State for loading
@@ -61,7 +61,12 @@ const CrearEquipoPage: React.FC = () => {
           "Authorization": `Bearer ${token}`, // Fixed template literal syntax
         },
       });
-
+      if (response.status === 401) {
+        // Si el token no es válido, borrar el token y redirigir al login
+        Cookies.remove('auth_token'); // Borrar el token
+        router.push('/login'); // Redirigir al usuario a la página de inicio de sesión
+        return; // Salir de la función
+      }
       if (response.ok) {
         setMessage('Registro creado exitosamente');
         // Optional: Reset form after success
