@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { TableModel } from '../components/TableModel';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { log } from 'console';
 
 function App() {
   const [data, setData] = useState<Array<any>>([]);
@@ -12,13 +13,13 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
 
-  const [rol, setRol] = useState<string | null>(null);
+  const [rol, setRol] = useState<string>('');
 
   useEffect(() => {
-    const user_rol = Cookies.get('rol');
-    setRol(user_rol || null);
+    setRol(Cookies.get('rol') || '');
   }, []);
-
+  console.log(rol);
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,7 +72,7 @@ function App() {
       <div className='mt-6 w-full '>
         <div className='flex justify-between'>
           <span className='font-bold text-lg'>Equipos</span>
-          {rol === "administrador" || rol === "inspector" && (
+          {(rol === "administrador" || rol === "inspector") && (
             <Link href="/equipos/registro">
               <button type="button" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Nuevo registro</button>
             </Link>
