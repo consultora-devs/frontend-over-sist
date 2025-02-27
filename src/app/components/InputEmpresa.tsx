@@ -21,7 +21,7 @@ function InputEmpresa({ className, setValue }: PropsInput) {
   const [selectedEmpresa, setSelectedEmpresa] = useState<{ 
     value: string; 
     label: string; 
-    ruc: string; 
+    ruc: string;  
     empresa_matriz: string;
   } | null>(null);
   

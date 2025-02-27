@@ -19,7 +19,7 @@ function App() {
     setRol(Cookies.get('rol') || '');
   }, []);
   console.log(rol);
-  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,7 +35,7 @@ function App() {
             'Content-Type': 'application/json',
           },
         });
-        
+
         if (!response.ok) {
           if (response.status === 401) {
             // Si el token no es válido, borrar el token y redirigir al login
@@ -49,7 +49,7 @@ function App() {
         const result = await response.json();
         setData(result.data); // Asignar los datos al estado
 
-        
+
       } catch (error: any) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
@@ -84,8 +84,7 @@ function App() {
             <div className="animate-spin rounded-full dark:border-gray-300 h-12 w-12 border-b-2 border-gray-900"></div>
           </div>
         ) : (
-          // Mostrar la tabla solo cuando los datos estén listos
-          <TableModel data={data} nameTable={"equipos"}/>  
+          <TableModel data={data} nameTable="equipos" />
         )}
       </div>
     </div>

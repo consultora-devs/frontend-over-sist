@@ -11,7 +11,7 @@ import { useRouter } from 'next/navigation';
 export interface FormData {
   empresa_matriz: string;
   empresa: string;
-  ruc: string;
+  ruc: number;
   inspector: string;
   fecha_servicio: string;
   certificadora: string;
@@ -46,6 +46,7 @@ const CrearEquipoPage: React.FC = () => {
   const [loading, setLoading] = React.useState<boolean>(false); // State for loading
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
+
     const formDataToSend = new FormData();
     Object.keys(data).forEach((key) => {
       const value = (data as any)[key];
@@ -66,12 +67,14 @@ const CrearEquipoPage: React.FC = () => {
           "Authorization": `Bearer ${token}`, // Fixed template literal syntax
         },
       });
+
       if (response.status === 401) {
         // Si el token no es válido, borrar el token y redirigir al login
         Cookies.remove('auth_token'); // Borrar el token
         router.push('/login'); // Redirigir al usuario a la página de inicio de sesión
         return; // Salir de la función
       }
+
       if (response.ok) {
         setMessage('Registro creado exitosamente');
         // Optional: Reset form after success
@@ -116,7 +119,7 @@ const CrearEquipoPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
       <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
-          Actualizar orden de trabajo para equipo
+          Registrar orden de trabajo para equipo
         </h2>
 
         {message && (
