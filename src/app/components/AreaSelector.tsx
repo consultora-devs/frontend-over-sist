@@ -1,6 +1,8 @@
+"use client"
 import { useEffect, useState } from 'react';
 import { UseFormRegister, FieldErrors } from 'react-hook-form';
 import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
 
 // Definimos la interfaz para el área
 interface Area {
@@ -18,6 +20,7 @@ const AreaSelector: React.FC<AreaSelectorProps> = ({ register, errors }) => {
   const [areas, setAreas] = useState<Area[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const router = useRouter();
 
   // Función para obtener las áreas desde la API
   useEffect(() => {
@@ -36,6 +39,12 @@ const AreaSelector: React.FC<AreaSelectorProps> = ({ register, errors }) => {
         // Verifica si la respuesta es exitosa (código 200-299)
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+        if (response.status === 401) {
+          // Si el token no es válido, borrar el token y redirigir al login
+          Cookies.remove('auth_token'); // Borrar el token
+          router.push('/login'); // Redirigir al usuario a la página de inicio de sesión
+          return; // Salir de la función
         }
 
         // Verifica si la respuesta es de tipo JSON

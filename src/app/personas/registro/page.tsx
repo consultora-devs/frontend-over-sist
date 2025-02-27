@@ -9,72 +9,47 @@ export interface FormData {
   empresa_matriz: string;
   empresa: string;
   ruc: string;
-  inspector: string;
   fecha_servicio: string;
   certificadora: string;
   tipo_curso: string;
   modalidad: string;
-  area: string;
-  dias_transcurridos: number;
-  departamento: string;
-  provincia: string;
-  n_factura: string;
-  dias_transc: number;
-  costo_sin_igv: number;
-  costo_mas_igv: number;
-  igv_pagar: number;
-  detraccion: number;
-  comentario: string;
-  verificado_factura: string;
-  verificado_pago: string;
-  pago_detraccion: number;
-  costo_dolares: number;
-  socio: string;
+  nombre_curso: string;
+  instructor: string;
   fotocheck: string;
-  dni: string;
+  dni: number;
   apellido_paterno: string;
   apellido_materno: string;
   primer_nombre: string;
-  segundo_nombre?: string; // Opcional, por si hay personas con un solo nombre
+  segundo_nombre?: string;
   aprobo: boolean;
   nota: number;
   puesto: string;
-  equipo_da_examen: string;
+  equipo_examen: string;
 }
-
 
 const CrearEquipoPage: React.FC = () => {
   const { setValue, register, handleSubmit, formState: { errors }, reset } = useForm<FormData>();
-
-
-  const [message, setMessage] = React.useState<string>(''); // State for success/error messages
-  const [loading, setLoading] = React.useState<boolean>(false); // State for loading
+  const [message, setMessage] = React.useState<string>('');
+  const [loading, setLoading] = React.useState<boolean>(false);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
-    const formDataToSend = new FormData();
-    Object.keys(data).forEach((key) => {
-      const value = (data as any)[key];
-      // Only append if value is not undefined/null
-      if (value !== undefined && value !== null) {
-        formDataToSend.append(key, value.toString());
-      }
-    });
-
     const token = Cookies.get("auth_token");
-    setLoading(true); // Start loading
+    setLoading(true);
+    // Convert "aprobo" to boolean
+    data.aprobo = data.aprobo === "true";
 
     try {
       const response = await fetch('http://127.0.0.1:8000/api/personas', {
         method: 'POST',
-        body: formDataToSend,
         headers: {
-          "Authorization": `Bearer ${token}`, // Fixed template literal syntax
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`,
         },
+        body: JSON.stringify(data),
       });
 
       if (response.ok) {
         setMessage('Registro creado exitosamente');
-        // Optional: Reset form after success
         reset();
       } else {
         const errorData = await response.json();
@@ -83,9 +58,8 @@ const CrearEquipoPage: React.FC = () => {
     } catch (error) {
       console.error('Error al guardar:', error);
       setMessage(error instanceof Error ? error.message : 'Ocurrió un error al guardar');
-    }
-    finally {
-      setLoading(false); // Stop loading once the request is completed
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -117,14 +91,17 @@ const CrearEquipoPage: React.FC = () => {
           Registro de orden de servicio para personas
         </h2>
 
-        {/* Success/Error Message */}
         {message && (
           <div className={`mb-4 p-2 text-center rounded ${message.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
             {message}
           </div>
         )}
+        
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="flex flex-col">
+            <InputEmpresa className="" setValue={setValue} />
+          </div>
           {isFieldVisible("empresa_matriz", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="empresa_matriz" className="mb-2 text-gray-700 dark:text-gray-200">
@@ -139,10 +116,6 @@ const CrearEquipoPage: React.FC = () => {
               {errors.empresa_matriz && <span className="text-red-500 text-sm">{errors.empresa_matriz.message}</span>}
             </div>
           )}
-
-          <div className="flex flex-col">
-            <InputEmpresa className="" setValue={setValue} />
-          </div>
 
           {isFieldVisible("ruc", tokenRole) && (
             <div className="flex flex-col">
@@ -196,20 +169,16 @@ const CrearEquipoPage: React.FC = () => {
               <label htmlFor="tipo_curso" className="mb-2 text-gray-700 dark:text-gray-200">
                 Tipo de Curso
               </label>
-              <select
+              <input
                 id="tipo_curso"
+                type="text"
+                placeholder="Ingrese tipo de curso"
                 {...register("tipo_curso", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              >
-                <option value="">Seleccione una opción</option>
-                <option value="practico">Práctico</option>
-                <option value="teorico">Teórico</option>
-                <option value="practico_teorico">Práctico Teórico</option>
-              </select>
-              {errors.tipo_unidad && <span className="text-red-500 text-sm">{errors.tipo_unidad.message}</span>}
+              />
+              {errors.tipo_curso && <span className="text-red-500 text-sm">{errors.tipo_curso.message}</span>}
             </div>
           )}
-
 
           {isFieldVisible("modalidad", tokenRole) && (
             <div className="flex flex-col">
@@ -220,47 +189,48 @@ const CrearEquipoPage: React.FC = () => {
                 id="modalidad"
                 {...register("modalidad", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              >
-                <option value="">Seleccione una opción</option>
+                >
+                <option value="">Seleccione...</option>
                 <option value="presencial">Presencial</option>
                 <option value="virtual">Virtual</option>
-                <option value="asincrono">Asíncrono</option>
               </select>
+            
               {errors.modalidad && <span className="text-red-500 text-sm">{errors.modalidad.message}</span>}
             </div>
           )}
 
-          {isFieldVisible("area", tokenRole) && (
+          {isFieldVisible("nombre_curso", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="area" className="mb-2 text-gray-700 dark:text-gray-200">
-                Nombre curso
+              <label htmlFor="nombre_curso" className="mb-2 text-gray-700 dark:text-gray-200">
+                Nombre del Curso
               </label>
               <input
-                id="area"
+                id="nombre_curso"
                 type="text"
-                placeholder="Ingrese área"
-                {...register("area", { required: "Este campo es obligatorio" })}
+                placeholder="Ingrese nombre del curso"
+                {...register("nombre_curso", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.area && <span className="text-red-500 text-sm">{errors.area.message}</span>}
+              {errors.nombre_curso && <span className="text-red-500 text-sm">{errors.nombre_curso.message}</span>}
             </div>
           )}
 
-          {isFieldVisible("inspector", tokenRole) && (
+          {isFieldVisible("instructor", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="inspector" className="mb-2 text-gray-700 dark:text-gray-200">
+              <label htmlFor="instructor" className="mb-2 text-gray-700 dark:text-gray-200">
                 Instructor
               </label>
               <input
-                id="inspector"
+                id="instructor"
                 type="text"
-                placeholder="Ingrese inspector"
-                {...register("inspector", { required: "Este campo es obligatorio" })}
+                placeholder="Ingrese instructor"
+                {...register("instructor", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.inspector && <span className="text-red-500 text-sm">{errors.inspector.message}</span>}
+              {errors.instructor && <span className="text-red-500 text-sm">{errors.instructor.message}</span>}
             </div>
           )}
+
           {isFieldVisible("fotocheck", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="fotocheck" className="mb-2 text-gray-700 dark:text-gray-200">
@@ -284,9 +254,9 @@ const CrearEquipoPage: React.FC = () => {
               </label>
               <input
                 id="dni"
-                type="text"
+                type="number"
                 placeholder="Ingrese DNI"
-                {...register("dni", { required: "Este campo es obligatorio", pattern: { value: /^[0-9]{8}$/, message: "DNI inválido" } })}
+                {...register("dni", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
               {errors.dni && <span className="text-red-500 text-sm">{errors.dni.message}</span>}
@@ -367,8 +337,8 @@ const CrearEquipoPage: React.FC = () => {
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               >
                 <option value="">Seleccione...</option>
-                <option value="SI">Sí</option>
-                <option value="NO">No</option>
+                <option value="true">Sí</option>
+                <option value="false">No</option>
               </select>
               {errors.aprobo && <span className="text-red-500 text-sm">{errors.aprobo.message}</span>}
             </div>
@@ -383,7 +353,7 @@ const CrearEquipoPage: React.FC = () => {
                 id="nota"
                 type="number"
                 placeholder="Ingrese nota"
-                {...register("nota", { required: "Este campo es obligatorio", min: { value: 0, message: "Nota no válida" }, max: { value: 20, message: "Nota no válida" } })}
+                {...register("nota", { required: "Este campo es obligatorio", min: 0, max: 20 })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
               {errors.nota && <span className="text-red-500 text-sm">{errors.nota.message}</span>}
@@ -406,187 +376,22 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("equipo_da_examen", tokenRole) && (
+          {isFieldVisible("equipo_examen", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="equipo_da_examen" className="mb-2 text-gray-700 dark:text-gray-200">
-                Equipo da Examen
+              <label htmlFor="equipo_examen" className="mb-2 text-gray-700 dark:text-gray-200">
+                Equipo de Examen
               </label>
               <input
-                id="equipo_da_examen"
+                id="equipo_examen"
                 type="text"
-                placeholder="Ingrese equipo da examen"
-                {...register("equipo_da_examen", { required: "Este campo es obligatorio" })}
+                placeholder="Ingrese equipo de examen"
+                {...register("equipo_examen", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.equipo_da_examen && <span className="text-red-500 text-sm">{errors.equipo_da_examen.message}</span>}
+              {errors.equipo_examen && <span className="text-red-500 text-sm">{errors.equipo_examen.message}</span>}
             </div>
           )}
 
-          
-
-          {isFieldVisible("n_factura", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="n_factura" className="mb-2 text-gray-700 dark:text-gray-200">
-                Número de Factura
-              </label>
-              <input
-                id="n_factura"
-                type="text"
-                placeholder="Ingrese número de factura"
-                {...register("n_factura")}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.n_factura && <span className="text-red-500 text-sm">{errors.n_factura.message}</span>}
-            </div>
-          )}
-
-          {isFieldVisible("costo_sin_igv", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="costo_sin_igv" className="mb-2 text-gray-700 dark:text-gray-200">
-                Monto sin IGV
-              </label>
-              <input
-                id="costo_sin_igv"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese monto sin IGV"
-                {...register("costo_sin_igv", { valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.costo_sin_igv && <span className="text-red-500 text-sm">{errors.costo_sin_igv.message}</span>}
-            </div>
-          )}
-
-          {isFieldVisible("costo_mas_igv", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="costo_mas_igv" className="mb-2 text-gray-700 dark:text-gray-200">
-                Monto con IGV
-              </label>
-              <input
-                id="costo_mas_igv"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese monto con IGV"
-                {...register("costo_mas_igv", { valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.costo_mas_igv && <span className="text-red-500 text-sm">{errors.costo_mas_igv.message}</span>}
-            </div>
-          )}
-
-          {isFieldVisible("igv_pagar", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="igv_pagar" className="mb-2 text-gray-700 dark:text-gray-200">
-                IGV a Pagar
-              </label>
-              <input
-                id="igv_pagar"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese IGV a Pagar"
-                {...register("igv_pagar", { valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.igv_pagar && <span className="text-red-500 text-sm">{errors.igv_pagar.message}</span>}
-            </div>
-          )}
-
-          {isFieldVisible("detraccion", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="detraccion" className="mb-2 text-gray-700 dark:text-gray-200">
-                Detracción
-              </label>
-              <input
-                id="detraccion"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese detracción"
-                {...register("detraccion", { valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.detraccion && <span className="text-red-500 text-sm">{errors.detraccion.message}</span>}
-            </div>
-          )}
-
-          {isFieldVisible("verificado_factura", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="verificado_factura" className="mb-2 text-gray-700 dark:text-gray-200">
-                Verificado Factura
-              </label>
-              <select
-                id="verificado_factura"
-                {...register("verificado_factura")}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              >
-                <option value="">Seleccione</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-              </select>
-              {errors.verificado_factura && (
-                <span className="text-red-500 text-sm">{errors.verificado_factura.message}</span>
-              )}
-            </div>
-          )}
-
-          {isFieldVisible("verificado_pago", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="verificado_pago" className="mb-2 text-gray-700 dark:text-gray-200">
-                Verificado Pago
-              </label>
-              <select
-                id="verificado_pago"
-                {...register("verificado_pago")}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              >
-                <option value="">Seleccione</option>
-                <option value="si">Sí</option>
-                <option value="no">No</option>
-              </select>
-              {errors.verificado_pago && (
-                <span className="text-red-500 text-sm">{errors.verificado_pago.message}</span>
-              )}
-            </div>
-          )}
-
-          {isFieldVisible("pago_detraccion", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="pago_detraccion" className="mb-2 text-gray-700 dark:text-gray-200">
-                Pago Detracción
-              </label>
-              <input
-                id="pago_detraccion"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese pago detracción"
-                {...register("pago_detraccion", { valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.pago_detraccion && (
-                <span className="text-red-500 text-sm">{errors.pago_detraccion.message}</span>
-              )}
-            </div>
-          )}
-
-          {isFieldVisible("costo_dolares", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="costo_dolares" className="mb-2 text-gray-700 dark:text-gray-200">
-                Costo en Dólares
-              </label>
-              <input
-                id="costo_dolares"
-                type="number"
-                step="0.01"
-                placeholder="Ingrese costo en dólares"
-                {...register("costo_dolares", { valueAsNumber: true })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.costo_dolares && (
-                <span className="text-red-500 text-sm">{errors.costo_dolares.message}</span>
-              )}
-            </div>
-          )}
-
-          {/* Loading effect on the submit button */}
           <div className="md:col-span-2 flex justify-end space-x-4">
             <button
               type="button"
@@ -597,7 +402,7 @@ const CrearEquipoPage: React.FC = () => {
             </button>
             <button
               type="submit"
-              disabled={loading} // Disable the button when loading
+              disabled={loading}
               className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center"
             >
               {loading ? (
