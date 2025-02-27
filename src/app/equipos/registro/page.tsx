@@ -6,6 +6,8 @@ import InputEmpresa from '@/app/components/InputEmpresa';
 import AreaSelector from '@/app/components/AreaSelector';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+
+
 export interface FormData {
   empresa_matriz: string;
   empresa: string;
@@ -25,12 +27,16 @@ export interface FormData {
   costo_mas_igv: number;
   igv_pagar: number;
   detraccion: number;
-  comentario: string;
+  comentarios: string;
   verificado_factura: string;
   verificado_pago: string;
   pago_detraccion: number;
   costo_dolares: number;
   socio: string;
+  n_orden_servicio?: string | null;
+  descripcion_servicio: string;
+  repuestos: string;
+
 }
 
 const CrearEquipoPage: React.FC = () => {
@@ -97,6 +103,8 @@ const CrearEquipoPage: React.FC = () => {
       "costo_mas_igv",
       "costo_sin_igv",
       "n_factura",
+      "descripcion_servicio",
+      "repuestos",
     ];
 
     if (role === "administrador") return true;
@@ -109,10 +117,9 @@ const CrearEquipoPage: React.FC = () => {
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
       <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
         <h2 className="text-xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
-          crear orden de servicio para equipo
+          Actualizar orden de trabajo para equipo
         </h2>
 
-        {/* Success/Error Message */}
         {message && (
           <div className={`mb-4 p-2 text-center rounded ${message.includes('exitosamente') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
             {message}
@@ -120,6 +127,22 @@ const CrearEquipoPage: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          {isFieldVisible("n_orden_servicio", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="n_orden_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
+                N° Orden Servicio
+              </label>
+              <input
+                id="n_orden_servicio"
+                type="text"
+                placeholder="Ingrese numero orden servicio"
+                {...register("n_orden_servicio", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.n_orden_servicio && <span className="text-red-500 text-sm">{errors.n_orden_servicio.message}</span>}
+            </div>
+          )}
 
           <div className="flex flex-col">
             <InputEmpresa className="" setValue={setValue} />
@@ -140,9 +163,9 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          
 
-          {isFieldVisible("ruc", tokenRole) && (
+
+          
             <div className="flex flex-col">
               <label htmlFor="ruc" className="mb-2 text-gray-700 dark:text-gray-200">
                 RUC
@@ -156,15 +179,32 @@ const CrearEquipoPage: React.FC = () => {
               />
               {errors.ruc && <span className="text-red-500 text-sm">{errors.ruc.message}</span>}
             </div>
+          
+
+          
+          {isFieldVisible("repuestos", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="repuestos" className="mb-2 text-gray-700 dark:text-gray-200">
+                Respuesto
+              </label>
+              <input
+                id="repuestos"
+                type="text"
+                placeholder="Ingrese el repuestos"
+                {...register("repuestos", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.repuestos && <span className="text-red-500 text-sm">{errors.repuestos.message}</span>}
+            </div>
           )}
 
-          {isFieldVisible("fecha_servicio", tokenRole) && (
+          {isFieldVisible("f_servicio", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="fecha_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
+              <label htmlFor="f_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
                 Fecha de Servicio
               </label>
               <input
-                id="fecha_servicio"
+                id="f_servicio"
                 type="date"
                 {...register("fecha_servicio", { required: "Este campo es obligatorio" })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
@@ -221,8 +261,21 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {/* Componente AreaSelector */}
-          <AreaSelector register={register} errors={errors} />
+          {isFieldVisible("area", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="area" className="mb-2 text-gray-700 dark:text-gray-200">
+                Área
+              </label>
+              <input
+                id="area"
+                type="text"
+                placeholder="Ingrese área"
+                {...register("area", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.area && <span className="text-red-500 text-sm">{errors.area.message}</span>}
+            </div>
+          )}
 
           {isFieldVisible("inspector", tokenRole) && (
             <div className="flex flex-col">
@@ -240,13 +293,13 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("departamento", tokenRole) && (
+          {isFieldVisible("Departamento", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="departamento" className="mb-2 text-gray-700 dark:text-gray-200">
+              <label htmlFor="Departamento" className="mb-2 text-gray-700 dark:text-gray-200">
                 Departamento
               </label>
               <input
-                id="departamento"
+                id="Departamento"
                 type="text"
                 placeholder="Ingrese departamento"
                 {...register("departamento", { required: "Este campo es obligatorio" })}
@@ -256,13 +309,13 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {isFieldVisible("provincia", tokenRole) && (
+          {isFieldVisible("Provincia", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="provincia" className="mb-2 text-gray-700 dark:text-gray-200">
-                provincia
+              <label htmlFor="Provincia" className="mb-2 text-gray-700 dark:text-gray-200">
+                Provincia
               </label>
               <input
-                id="provincia"
+                id="Provincia"
                 type="text"
                 placeholder="Ingrese provincia"
                 {...register("provincia", { required: "Este campo es obligatorio" })}
@@ -431,6 +484,40 @@ const CrearEquipoPage: React.FC = () => {
               {errors.costo_dolares && (
                 <span className="text-red-500 text-sm">{errors.costo_dolares.message}</span>
               )}
+            </div>
+          )}
+          {isFieldVisible("comentarios", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="comentarios" className="mb-2 text-gray-700 dark:text-gray-200">
+                comentario
+              </label>
+              <input
+                id="comentarios"
+                type="text"
+                step="0.01"
+                placeholder="Ingrese comentarios"
+                {...register("comentarios", { valueAsNumber: true })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.comentarios && (
+                <span className="text-red-500 text-sm">{errors.comentarios.message}</span>
+              )}
+            </div>
+          )}
+          
+          {isFieldVisible("descripcion_servicio", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="descripcion_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
+                Descripcion del Servicio
+              </label>
+              <textarea
+                id="descripcion_servicio"
+                
+                placeholder="Ingrese Descripcion del servicio"
+                {...register("descripcion_servicio", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.descripcion_servicio && <span className="text-red-500 text-sm">{errors.descripcion_servicio.message}</span>}
             </div>
           )}
 

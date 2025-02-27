@@ -5,6 +5,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import InputEmpresa from '@/app/components/InputEmpresa';
 import Cookies from 'js-cookie';
 import { useParams } from 'next/navigation';
+import { Textarea } from '@heroui/react';
 
 export interface FormData {
   empresa_matriz: string;
@@ -25,13 +26,16 @@ export interface FormData {
   costo_mas_igv: number;
   igv_pagar: number;
   detraccion: number;
-  comentario: string;
+  comentarios: string;
   verificado_factura: string;
   verificado_pago: string;
   pago_detraccion: number;
   costo_dolares: number;
   socio: string;
   n_orden_servicio?: string | null;
+  descripcion_servicio: string;
+  repuestos: string;
+
 }
 
 
@@ -83,6 +87,7 @@ const EditEquipoPage: React.FC = () => {
           setValue('tipo_unidad', equipoData.tipo_unidad || '');
           setValue('placa', equipoData.placa || '');
           setValue('area', equipoData.area || '');
+          //dias transcurridos missing add your value and input
           setValue('dias_transcurridos', equipoData.dias_transcurridos || 0);
           setValue('departamento', equipoData.Departamento || equipoData.departamento || '');
           setValue('provincia', equipoData.Provincia || equipoData.provincia || '');
@@ -93,12 +98,14 @@ const EditEquipoPage: React.FC = () => {
           setValue('costo_mas_igv', equipoData.costo_mas_igv || 0);
           setValue('igv_pagar', equipoData.igv_pagar || 0);
           setValue('detraccion', equipoData.detraccion || 0);
-          setValue('comentario', equipoData.comentario || '');
+          setValue('comentarios', equipoData.comentario || '');
           setValue('verificado_factura', equipoData.verificado_factura || 'no');
           setValue('verificado_pago', equipoData.verificado_pago || 'no');
           setValue('pago_detraccion', equipoData.pago_detraccion || 0);
           setValue('costo_dolares', equipoData.costo_dolares || 0);
           setValue('socio', equipoData.socio || '');
+          setValue('descripcion_servicio', equipoData.descripcion_servicio || '');
+          setValue('repuestos', equipoData.respuestos || '');
         }
       } catch (error) {
         setMessage('Error al cargar los datos del equipo');
@@ -110,9 +117,7 @@ const EditEquipoPage: React.FC = () => {
     fetchData();
   }, [equipoId, setValue]);
 
-  if(loading){
-    <div className="spinner-border animate-spin border-t-2 border-b-2 border-white w-4 h-4 mr-2"></div>
-  }
+
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     // Construimos el payload, forzando n_orden_servicio como null
@@ -120,10 +125,10 @@ const EditEquipoPage: React.FC = () => {
       ...data,
       n_orden_servicio: null,
     };
-  
+
     const token = Cookies.get("auth_token");
     setLoading(true); // Inicia el loading
-  
+
     try {
       const response = await fetch(`http://127.0.0.1:8000/api/equipos/${equipoId}`, {
         method: 'PUT',
@@ -133,7 +138,7 @@ const EditEquipoPage: React.FC = () => {
         },
         body: JSON.stringify(payload), // Enviamos el payload en formato JSON
       });
-  
+
       if (response.ok) {
         setMessage('Registro actualizado exitosamente');
       } else {
@@ -147,7 +152,7 @@ const EditEquipoPage: React.FC = () => {
       setLoading(false); // Detenemos el loading
     }
   };
-  
+
 
   const tokenRole = Cookies.get("rol");
 
@@ -162,6 +167,8 @@ const EditEquipoPage: React.FC = () => {
       "costo_mas_igv",
       "costo_sin_igv",
       "n_factura",
+      "descripcion_servicio",
+      "repuestos",
     ];
 
     if (role === "administrador") return true;
@@ -171,6 +178,14 @@ const EditEquipoPage: React.FC = () => {
   };
 
 
+  if (loading) {
+    return <>
+      <div className='flex justify-center items-center  h-screen'>
+      <div className="spinner-border animate-spin border-t-2 border-b-2 border-white w-4 h-4 mr-2"></div>
+      </div>
+    </>
+
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
@@ -186,9 +201,27 @@ const EditEquipoPage: React.FC = () => {
         )}
 
         <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="flex flex-col">
+
+          {isFieldVisible("n_orden_servicio", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="n_orden_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
+                N° Orden Servicio
+              </label>
+              <input
+                id="n_orden_servicio"
+                type="text"
+                placeholder="Ingrese numero orden servicio"
+                {...register("n_orden_servicio", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.n_orden_servicio && <span className="text-red-500 text-sm">{errors.n_orden_servicio.message}</span>}
+            </div>
+          )}
+
+          <div className="flex flex-col">
             <InputEmpresa className="" setValue={setValue} />
           </div>
+
           {isFieldVisible("empresa_matriz", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="empresa_matriz" className="mb-2 text-gray-700 dark:text-gray-200">
@@ -204,9 +237,9 @@ const EditEquipoPage: React.FC = () => {
             </div>
           )}
 
-          
 
-          {isFieldVisible("ruc", tokenRole) && (
+
+          
             <div className="flex flex-col">
               <label htmlFor="ruc" className="mb-2 text-gray-700 dark:text-gray-200">
                 RUC
@@ -219,6 +252,23 @@ const EditEquipoPage: React.FC = () => {
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
               {errors.ruc && <span className="text-red-500 text-sm">{errors.ruc.message}</span>}
+            </div>
+          
+
+          
+          {isFieldVisible("repuestos", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="repuestos" className="mb-2 text-gray-700 dark:text-gray-200">
+                Respuesto
+              </label>
+              <input
+                id="repuestos"
+                type="text"
+                placeholder="Ingrese el repuestos"
+                {...register("repuestos", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.repuestos && <span className="text-red-500 text-sm">{errors.repuestos.message}</span>}
             </div>
           )}
 
@@ -510,22 +560,37 @@ const EditEquipoPage: React.FC = () => {
               )}
             </div>
           )}
-             {isFieldVisible("comentario", tokenRole) && (
+          {isFieldVisible("comentarios", tokenRole) && (
             <div className="flex flex-col">
-              <label htmlFor="comentario" className="mb-2 text-gray-700 dark:text-gray-200">
+              <label htmlFor="comentarios" className="mb-2 text-gray-700 dark:text-gray-200">
                 comentario
               </label>
               <input
-                id="comentario"
+                id="comentarios"
                 type="text"
                 step="0.01"
                 placeholder="Ingrese comentarios"
-                {...register("comentario", { valueAsNumber: true })}
+                {...register("comentarios", { valueAsNumber: true })}
                 className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
               />
-              {errors.comentario && (
-                <span className="text-red-500 text-sm">{errors.comentario.message}</span>
+              {errors.comentarios && (
+                <span className="text-red-500 text-sm">{errors.comentarios.message}</span>
               )}
+            </div>
+          )}
+          {isFieldVisible("descripcion_servicio", tokenRole) && (
+            <div className="flex flex-col">
+              <label htmlFor="descripcion_servicio" className="mb-2 text-gray-700 dark:text-gray-200">
+                Descripcion del Servicio
+              </label>
+              <textarea
+                id="descripcion_servicio"
+                
+                placeholder="Ingrese Descripcion del servicio"
+                {...register("descripcion_servicio", { required: "Este campo es obligatorio" })}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.descripcion_servicio && <span className="text-red-500 text-sm">{errors.descripcion_servicio.message}</span>}
             </div>
           )}
 
