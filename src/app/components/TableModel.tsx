@@ -56,7 +56,7 @@ export function TableModel({ data, nameTable }: { data: Array<any>; nameTable: s
             if (b === 'n_orden_servicio') return 1;
             return 0;
         });
-
+        
     return (
         <div className="relative overflow-x-auto mt-4 border max-h-[calc(100vh-180px)] dark:border-gray-600">
             <table className="w-full text-sm text-left rtl:text-right text-gray-600 dark:text-gray-400">
