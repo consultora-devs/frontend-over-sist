@@ -125,6 +125,14 @@ function Sidevar() {
                 </button>
                   <ul className={`${isAccordionOpen ? 'block' : 'hidden'} py-2 space-y-2`}>
                       <li>
+                        <Link
+                            href="/all-ordenes"
+                            className="flex items-center dark:text-gray-200 w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
+                        >
+                            All Ordenes
+                        </Link>
+                      </li>
+                      <li>
                       <Link
                           href="/equipos"
                           className="flex items-center dark:text-gray-200 w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700"
@@ -187,6 +195,18 @@ function Sidevar() {
                         </g>
                       </svg>
                       <span className="flex-1 ms-2 dark:text-gray-200 whitespace-nowrap">Usuarios</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/cursos" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                      <svg className='text-gray-700 dark:text-gray-400 h-6 w-6 stroke-5' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
+                          <circle cx="9" cy="9" r="4"/>
+                          <path d="M16 19c0-3.314-3.134-6-7-6s-7 2.686-7 6m13-6a4 4 0 1 0-3-6.646"/>
+                          <path d="M22 19c0-3.314-3.134-6-7-6c-.807 0-2.103-.293-3-1.235"/>
+                        </g>
+                      </svg>
+                      <span className="flex-1 ms-2 dark:text-gray-200 whitespace-nowrap">Cursos</span>
                     </Link>
                   </li>
                 </ul>
