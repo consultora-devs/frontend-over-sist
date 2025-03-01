@@ -199,13 +199,7 @@ function Sidevar() {
                   </li>
                   <li>
                     <Link href="/cursos" className="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                      <svg className='text-gray-700 dark:text-gray-400 h-6 w-6 stroke-5' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                        <g fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2">
-                          <circle cx="9" cy="9" r="4"/>
-                          <path d="M16 19c0-3.314-3.134-6-7-6s-7 2.686-7 6m13-6a4 4 0 1 0-3-6.646"/>
-                          <path d="M22 19c0-3.314-3.134-6-7-6c-.807 0-2.103-.293-3-1.235"/>
-                        </g>
-                      </svg>
+                      <svg className='text-gray-700 dark:text-gray-400 h-6 w-6 stroke-5' xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3h-2v6.5l-3-2.25l-3 2.25V3H5v18h14zm-6 0v2.5l1-.75l1 .75V3zm8 20H3V1h18z"/></svg>
                       <span className="flex-1 ms-2 dark:text-gray-200 whitespace-nowrap">Cursos</span>
                     </Link>
                   </li>
