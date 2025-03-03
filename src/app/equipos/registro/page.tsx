@@ -36,6 +36,7 @@ export interface FormData {
   n_orden_servicio?: string | null;
   descripcion_servicio: string;
   repuestos: string;
+  pdf:File| null
 }
 
 const CrearEquipoPage: React.FC = () => {
@@ -528,6 +529,19 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
+          <div className="flex flex-col">
+              <label htmlFor="pdf" className="mb-2 text-gray-700 dark:text-gray-200">
+                PDF
+              </label>
+              <input
+                type="file"
+                id="pdf"
+                accept=".pdf"
+                {...register("pdf")}
+                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
+              />
+              {errors.pdf && <span className="text-red-500 text-sm">{errors.pdf.message}</span>}
+            </div>
           {/* Loading effect on the submit button */}
           <div className="md:col-span-2 flex justify-end space-x-4">
             <button
