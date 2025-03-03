@@ -147,6 +147,12 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     if (processedItem.created_at) {
       processedItem.created_at = formatDate(processedItem.created_at);
     }
+    if (processedItem.fecha_inicio) {
+      processedItem.fecha_inicio = formatDate(processedItem.fecha_inicio);
+    }
+    if (processedItem.fecha_final) {
+      processedItem.fecha_final = formatDate(processedItem.fecha_final);
+    }
     if (processedItem.updated_at) {
       processedItem.updated_at = formatDate(processedItem.updated_at);
     }
@@ -161,7 +167,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
       <table className="w-full text-sm text-left">
         <thead>
           <tr>
-            <th className="px-1 py-0 border-b-2">
+            <th className="px-1 py-0 w-10 border-b-2 border-gray-900">
               Action
             </th>
             {columns.map((col, index) => (
@@ -172,7 +178,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
                 onDragOver={(e) => handleDragOver(index, e)}
                 onDrop={(e) => handleDrop(index, e)}
                 style={{ width: col.width }}
-                className="relative px-2 py-2 border-b-2 border-l select-none"
+                className="relative px-2 py-2 border-l border-b-2  border-b-gray-900 select-none"
               >
                 {col.key
                   .replace(/_/g, " ")
@@ -214,7 +220,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
               {columns.map((col, colIndex) => (
                 <td
                   key={`${rowIndex}-${colIndex}`}
-                  className="px-2 py-1 border-l"
+                  className="px-2 py-1 border-l border-b"
                   style={{ width: col.width }}
                 >
                   {item[col.key]}
