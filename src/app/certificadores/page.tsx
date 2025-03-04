@@ -4,15 +4,15 @@ import Cookies from 'js-cookie';
 import { TableModel } from '../components/TableModel';
 import { useRouter } from 'next/navigation';
 
-// Definir un tipo para los datos de las áreas
-interface Area {
+// Definir un tipo para los datos de los certificadores
+interface Certificador {
   id: number;
   nombre: string;
   // Agrega otros campos si es necesario
 }
-
+ 
 function App() {
-  const [data, setData] = useState<Array<Area>>([]); // Usar el tipo Area
+  const [data, setData] = useState<Array<Certificador>>([]); // Usar el tipo Certificador
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
