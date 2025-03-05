@@ -48,7 +48,7 @@ function App() {
         }
 
         const result = await response.json();
-        setData(result.data);
+        setData(result.data);// Asignar los datos al estado
         // Se actualizan los estados de paginación según lo que retorne tu API
         setNextPage(result.next_page_url);
         setPreviousPage(result.prev_page_url);
@@ -117,42 +117,44 @@ function App() {
         ) : (
           <>
             <TableModel data={data} nameTable="equipos" />
-            <div className="flex justify-center mt-4 space-x-2">
-  <button
-    onClick={handleFirstPage}
-    disabled={currentPage === 1}
-    className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
-  >
-    Primero
-  </button>
-  <button
-    onClick={handlePreviousPage}
-    disabled={!previousPage}
-    className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
-  >
-    Anterior
-  </button>
-  <span className="px-3 py-1 text-gray-800 dark:text-gray-200">
-    Página {currentPage} de {lastPage}
-  </span>
-  <button
-    onClick={handleNextPage}
-    disabled={!nextPage}
-    className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
-  >
-    Siguiente
-  </button>
-  <button
-    onClick={handleLastPage}
-    disabled={currentPage === lastPage}
-    className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
-  >
-    Último
-  </button>
-</div>
-
           </>
         )}
+
+        {/** Paginacion */}
+        <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={handleFirstPage}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Primero
+          </button>
+          <button
+            onClick={handlePreviousPage}
+            disabled={!previousPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span className="px-3 py-1 text-gray-800 dark:text-gray-200">
+            Página {currentPage} de {lastPage}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={!nextPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+          <button
+            onClick={handleLastPage}
+            disabled={currentPage === lastPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Último
+          </button>
+        </div>
+  
       </div>
     </div>
   );
