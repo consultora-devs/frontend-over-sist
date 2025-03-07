@@ -187,7 +187,27 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
                 <div
                   className="absolute right-0 top-0 h-full w-2 cursor-col-resize"
                   onMouseDown={(e) => handleMouseDown(index, e)}
-                ></div>
+                >
+                  {/* Handle para redimensionar */}
+                  <svg
+                    className="h-5 w-5 text-gray-700 cursor-pointer"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 25"
+                  >
+                    <g
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M19 19H5V5h14v14z" />
+                    </g>
+                  </svg>
+
+                </div>
               </th>
             ))}
           </tr>
