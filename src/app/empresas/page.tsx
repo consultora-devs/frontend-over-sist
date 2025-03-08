@@ -5,6 +5,7 @@ function Page() {
   return (
     <div className='container mx-auto py-5 px-10'>
       <DataTable />
+      
     </div>
   )
 }

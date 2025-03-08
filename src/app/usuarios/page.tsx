@@ -11,6 +11,16 @@ function App() {
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
 
+
+  // Estados para paginación
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [nextPage, setNextPage] = useState<string>('');
+  const [previousPage, setPreviousPage] = useState<string>('');
+  const [lastPage, setLastPage] = useState<number>(1);
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       setError(null); // Limpiar el error anterior, si lo hay
@@ -18,7 +28,7 @@ function App() {
 
       try {
         const token = Cookies.get('auth_token'); // Obtener token de la cookie
-        const response = await fetch('http://127.0.0.1:8000/api/users', {
+        const response = await fetch(`http://127.0.0.1:8000/api/users?page=${currentPage}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Incluir token en el encabezado
@@ -37,8 +47,12 @@ function App() {
         }
 
         const result = await response.json();
-        setData(result); // Asignar los datos al estado de datos para mostralos en la tabla 
-
+        setData(result.data); // Asignar los datos al estado de datos para mostralos en la tabla 
+         // Se actualizan los estados de paginación según lo que retorne tu API
+         setNextPage(result.next_page_url);
+         setPreviousPage(result.prev_page_url);
+         setCurrentPage(result.current_page);
+         setLastPage(result.last_page);
         
       } catch (error: any) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
@@ -49,7 +63,36 @@ function App() {
     };
 
     fetchData();
-  }, []);
+  }, [currentPage, router]);
+
+
+    // Funciones para cambiar de página
+    const handleFirstPage = () => {
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+    };
+  
+    const handlePreviousPage = () => {
+      if (previousPage) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
+  
+    const handleNextPage = () => {
+      if (nextPage) {
+        setCurrentPage(currentPage + 1);
+      }
+    };
+  
+    const handleLastPage = () => {
+      if (currentPage !== lastPage) {
+        setCurrentPage(lastPage);
+      }
+    };
+
+
+
 
   return (
     <div className="w-full px-4 h-full">
@@ -76,6 +119,40 @@ function App() {
           <TableModel data={data} nameTable={"usuarios"}/>  
         )}
       </div>
+       {/** Paginacion */}
+       <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={handleFirstPage}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Primero
+          </button>
+          <button
+            onClick={handlePreviousPage}
+            disabled={!previousPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span className="px-3 py-1 text-gray-800 dark:text-gray-200">
+            Página {currentPage} de {lastPage}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={!nextPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+          <button
+            onClick={handleLastPage}
+            disabled={currentPage === lastPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Último
+          </button>
+        </div>
     </div>
   );
 }

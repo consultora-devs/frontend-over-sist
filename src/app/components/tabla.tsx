@@ -71,12 +71,21 @@ export function DataTable() {
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
 
+  // Estados para paginación
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [nextPage, setNextPage] = useState<string>('');
+  const [previousPage, setPreviousPage] = useState<string>('');
+  const [lastPage, setLastPage] = useState<number>(1);
+
+
+
+
   useEffect(() => {
     const fetchCompanies = async () => {
       setLoading(true);
       const token = Cookies.get("auth_token");
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/empresas", {
+        const response = await fetch(`http://127.0.0.1:8000/api/empresas?page=${currentPage}`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +94,7 @@ export function DataTable() {
         });
         const companies = await response.json();
 
-        const mappedData = companies.map((company: any) => ({
+        const mappedData = companies.data.map((company: any) => ({
           id: company.id,
           businessName: company.razon_social,
           tradeName: "", // Puedes asignar un valor si lo necesitas
@@ -99,6 +108,11 @@ export function DataTable() {
         }));
 
         setData(mappedData);
+        // Se actualizan los estados de paginación según lo que retorne tu API
+        setNextPage(companies.next_page_url);
+        setPreviousPage(companies.prev_page_url);
+        setCurrentPage(companies.current_page);
+        setLastPage(companies.last_page);
       } catch (error) {
         console.error("Error fetching companies:", error);
       } finally {
@@ -107,7 +121,7 @@ export function DataTable() {
     };
 
     fetchCompanies();
-  }, []);
+  }, [currentPage]);
 
   const filteredData = data.filter((company) => {
     const matchesSearch =
@@ -179,6 +193,32 @@ export function DataTable() {
       variant: "destructive",
     });
   };
+
+
+    // Funciones para cambiar de página
+    const handleFirstPage = () => {
+      if (currentPage !== 1) {
+        setCurrentPage(1);
+      }
+    };
+  
+    const handlePreviousPage = () => {
+      if (previousPage) {
+        setCurrentPage(currentPage - 1);
+      }
+    };
+  
+    const handleNextPage = () => {
+      if (nextPage) {
+        setCurrentPage(currentPage + 1);
+      }
+    };
+  
+    const handleLastPage = () => {
+      if (currentPage !== lastPage) {
+        setCurrentPage(lastPage);
+      }
+    };
 
   return (
     <div className="space-y-4">
@@ -337,6 +377,41 @@ export function DataTable() {
           )}
         </div>
       </div>
+
+         {/** Paginacion */}
+         <div className="flex justify-center mt-4 space-x-2">
+          <button
+            onClick={handleFirstPage}
+            disabled={currentPage === 1}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Primero
+          </button>
+          <button
+            onClick={handlePreviousPage}
+            disabled={!previousPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Anterior
+          </button>
+          <span className="px-3 py-1 text-gray-800 dark:text-gray-200">
+            Página {currentPage} de {lastPage}
+          </span>
+          <button
+            onClick={handleNextPage}
+            disabled={!nextPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Siguiente
+          </button>
+          <button
+            onClick={handleLastPage}
+            disabled={currentPage === lastPage}
+            className="px-3 py-1 bg-gray-200 dark:bg-gray-700 dark:text-white rounded disabled:opacity-50"
+          >
+            Último
+          </button>
+        </div>
     </div>
   );
 }
