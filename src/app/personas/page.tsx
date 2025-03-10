@@ -17,6 +17,10 @@ function App() {
   const [lastPage, setLastPage] = useState<number>(1);
 
 
+  // Estados para la búsqueda
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedField, setSelectedField] = useState<string>('');
+
   useEffect(() => {
     const fetchData = async () => {
       setError(null); // Limpiar el error anterior, si lo hay
@@ -80,6 +84,29 @@ function App() {
     }
   };
 
+
+  // Función de búsqueda
+  const handleSearch = () => {
+    if (!selectedField || !searchTerm.trim()) return;
+    const filteredData = data.filter((item: any) => {
+      // Convertir el valor a string y compararlo en minúsculas
+      const fieldValue = item[selectedField] ? String(item[selectedField]).toLowerCase() : '';
+      return fieldValue.includes(searchTerm.toLowerCase());
+    });
+    setData(filteredData);
+  };
+
+  // Función para limpiar la búsqueda y restaurar los datos originales
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    setSelectedField('');
+    setData(data);
+  };
+
+
+
+
+
   return (
     <div className="w-full px-4 h-full">
       {error ? (
@@ -96,16 +123,56 @@ function App() {
           </Link>
         </div>
 
+                {/* Buscador */}
+                <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:space-x-2 gap-1">
+          <select 
+            className="border rounded p-2  sm:mb-0 bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
+            value={selectedField}
+            onChange={(e) => setSelectedField(e.target.value)}
+          >
+            <option value="" className='bg-gray-100 dark:bg-gray-700 dark:text-gray-200'>Seleccione el campo</option>
+            {data.length > 0 && Object.keys(data[0]).map((key) => (
+              <option key={key} value={key} className='bg-gray-100 dark:bg-gray-700 dark:text-gray-200'>
+                {key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}
+              </option>
+            ))}
+          </select>
+          <input 
+            type="text" 
+            placeholder="Buscar..." 
+            className="border rounded p-2 flex-1 mb-2 sm:mb-0 bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button 
+            onClick={handleSearch}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            title="Buscar"
+          >
+            {/* Ícono de lupa (SVG) */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
+            </svg>
+          </button>
+          <button 
+            onClick={handleClearSearch}
+            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition "
+            title="Limpiar búsqueda"
+          >
+            Limpiar
+          </button>
+        </div>
+
         {loading ? (
           <div className="flex justify-center items-center h-64">
             <div className="animate-spin rounded-full dark:border-gray-300 h-12 w-12 border-b-2 border-gray-900"></div>
           </div>
         ) : (
           <>
-            <TableModel data={data} nameTable="equipos" />
+            <TableModel data={data} nameTable="personas" />
           </>
         )}
-
+ 
         {/** Paginacion */}
         <div className="flex justify-center mt-4 space-x-2">
           <button

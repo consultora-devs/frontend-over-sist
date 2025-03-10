@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 function App() {
+  const [fetchedData, setFetchedData] = useState<Array<any>>([]);
   const [data, setData] = useState<Array<any>>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,6 +19,9 @@ function App() {
   const [lastPage, setLastPage] = useState<number>(1);
 
   const [rol, setRol] = useState<string>('');
+  // Estados para la búsqueda
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedField, setSelectedField] = useState<string>('');
 
   useEffect(() => {
     setRol(Cookies.get('rol') || '');
@@ -48,8 +52,10 @@ function App() {
         }
 
         const result = await response.json();
-        setData(result.data);// Asignar los datos al estado
-        // Se actualizan los estados de paginación según lo que retorne tu API
+        // Guardamos la data original y la data que se mostrará en la tabla.
+        setFetchedData(result.data);
+        setData(result.data);
+        // Actualización de la paginación
         setNextPage(result.next_page_url);
         setPreviousPage(result.prev_page_url);
         setCurrentPage(result.current_page);
@@ -90,6 +96,24 @@ function App() {
     }
   };
 
+  // Función de búsqueda
+  const handleSearch = () => {
+    if (!selectedField || !searchTerm.trim()) return;
+    const filteredData = fetchedData.filter((item: any) => {
+      // Convertir el valor a string y compararlo en minúsculas
+      const fieldValue = item[selectedField] ? String(item[selectedField]).toLowerCase() : '';
+      return fieldValue.includes(searchTerm.toLowerCase());
+    });
+    setData(filteredData);
+  };
+
+  // Función para limpiar la búsqueda y restaurar los datos originales
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    setSelectedField('');
+    setData(fetchedData);
+  };
+
   return (
     <div className="w-full px-4 h-full">
       {error && (
@@ -99,16 +123,59 @@ function App() {
       )}
 
       <div className="mt-6 w-full">
-        <div className="flex justify-between">
-          <span className="font-bold text-lg">Equipos</span>
+        <div className="flex justify-between items-center">
+          <span className="font-bold text-2xl dark:text-white ">Equipos</span>
           {(rol === "administrador" || rol === "inspector") && (
             <Link href="/equipos/registro">
-              <button type="button" className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+              <button 
+                type="button" 
+                className="text-white bg-blue-600 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-xs text-xs px-5 py-2 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800  ">
                 Nuevo registro
               </button>
             </Link>
           )}
         </div>
+
+        {/* Buscador */}
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:space-x-2 gap-1">
+          <select 
+            className="border rounded p-2  sm:mb-0 bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
+            value={selectedField}
+            onChange={(e) => setSelectedField(e.target.value)}
+          >
+            <option value="" className='bg-gray-100 dark:bg-gray-700 dark:text-gray-200'>Seleccione el campo</option>
+            {fetchedData.length > 0 && Object.keys(fetchedData[0]).map((key) => (
+              <option key={key} value={key} className='bg-gray-100 dark:bg-gray-700 dark:text-gray-200'>
+                {key.replace(/_/g, " ").replace(/\b\w/g, (char) => char.toUpperCase())}
+              </option>
+            ))}
+          </select>
+          <input 
+            type="text" 
+            placeholder="Buscar..." 
+            className="border rounded p-2 flex-1 mb-2 sm:mb-0 bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <button 
+            onClick={handleSearch}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            title="Buscar"
+          >
+            {/* Ícono de lupa (SVG) */}
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
+            </svg>
+          </button>
+          <button 
+            onClick={handleClearSearch}
+            className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition "
+            title="Limpiar búsqueda"
+          >
+            Limpiar
+          </button>
+        </div>
+        
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -119,8 +186,8 @@ function App() {
             <TableModel data={data} nameTable="equipos" />
           </>
         )}
-
-        {/** Paginacion */}
+      
+        {/** Paginación */}
         <div className="flex justify-center mt-4 space-x-2">
           <button
             onClick={handleFirstPage}

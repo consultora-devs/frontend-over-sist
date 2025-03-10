@@ -31,7 +31,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
       : [];
   };
 
-  // Inicializamos el estado de las columnas, intentando cargar el orden guardado en localStorage.
+  // Estado de columnas (incluyendo el orden y ancho)
   const [columns, setColumns] = useState<Column[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem(localStorageKey);
@@ -48,13 +48,13 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   });
   const [draggedColIndex, setDraggedColIndex] = useState<number | null>(null);
 
-  // Estados para el redimensionamiento
+  // Estados para redimensionamiento
   const [isResizing, setIsResizing] = useState(false);
   const [resizeColIndex, setResizeColIndex] = useState<number | null>(null);
   const [startX, setStartX] = useState(0);
   const [startWidth, setStartWidth] = useState(0);
 
-  // --- Funciones para reordenar columnas (drag & drop) ---
+  // Funciones para reordenar columnas (drag & drop)
   const handleDragStart = (index: number, e: React.DragEvent<HTMLTableHeaderCellElement>) => {
     setDraggedColIndex(index);
     e.dataTransfer.effectAllowed = "move";
@@ -74,7 +74,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     setDraggedColIndex(null);
   };
 
-  // --- Funciones para redimensionar columnas ---
+  // Funciones para redimensionar columnas
   const handleMouseDown = (index: number, e: React.MouseEvent<HTMLDivElement>) => {
     setIsResizing(true);
     setResizeColIndex(index);
@@ -120,7 +120,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     }
   }, [columns, localStorageKey]);
 
-  // --- Funciones de formateo (igual que en tu código original) ---
+  // Funciones de formateo
   const formatDate = (isoDate: string): string => {
     const date = new Date(isoDate);
     const day = String(date.getDate()).padStart(2, '0');
@@ -163,12 +163,12 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   });
 
   return (
-    <div className="relative overflow-x-auto mt-4 border max-h-[calc(100vh-180px)]">
-      <table className="w-full text-sm text-left">
-        <thead>
+    <div className=" relative overflow-x-auto mt-4 border rounded-lg shadow-lg max-h-[calc(100vh-180px)] bg-white dark:bg-gray-800">
+      <table className="w-full text-sm text-left text-gray-800 dark:text-gray-200">
+        <thead className="bg-blue-600 text-white dark:bg-gray-700">
           <tr>
-            <th className="px-1 py-0 w-10 border-b-2 border-gray-900">
-              Action
+            <th className="px-4 py-3 w-16 border-b-2 border-blue-800 dark:border-gray-600">
+              Acción
             </th>
             {columns.map((col, index) => (
               <th
@@ -178,47 +178,30 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
                 onDragOver={(e) => handleDragOver(index, e)}
                 onDrop={(e) => handleDrop(index, e)}
                 style={{ width: col.width }}
-                className="relative px-2 py-2 border-l border-b-2  border-b-gray-900 select-none"
+                className="relative px-4 py-2 border-l border-b-2 border-blue-800 dark:border-gray-600 select-none cursor-move transition-all"
               >
                 {col.key
                   .replace(/_/g, " ")
                   .replace(/\b\w/g, (char) => char.toUpperCase())}
                 {/* Handle para redimensionar */}
                 <div
-                  className="absolute right-0 top-0 h-full w-2 cursor-col-resize"
+                  className="absolute right-0 top-0 h-full w-2 cursor-col-resize hover:bg-blue-400 dark:hover:bg-gray-500"
                   onMouseDown={(e) => handleMouseDown(index, e)}
-                >
-                  {/* Handle para redimensionar */}
-                  <svg
-                    className="h-5 w-5 text-gray-700 cursor-pointer"
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 25"
-                  >
-                    <g
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <path d="M19 19H5V5h14v14z" />
-                    </g>
-                  </svg>
-
-                </div>
+                ></div>
               </th>
             ))}
           </tr>
         </thead>
-        <tbody>
+        <tbody className="bg-white dark:bg-gray-800">
           {processedData.map((item, rowIndex) => (
-            <tr key={rowIndex}>
-              <td className="px-1 py-1">
+            <tr
+              key={rowIndex}
+              className="border-b transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
+            >
+              <td className="px-4 ">
                 <Link href={`/${nameTable}/editar/${item.id}`}>
                   <svg
-                    className="h-5 w-5 text-gray-700 cursor-pointer"
+                    className="h-5 w-5 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 cursor-pointer transition-colors"
                     xmlns="http://www.w3.org/2000/svg"
                     width="24"
                     height="24"
@@ -240,7 +223,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
               {columns.map((col, colIndex) => (
                 <td
                   key={`${rowIndex}-${colIndex}`}
-                  className="px-2 py-1 border-l border-b"
+                  className="px-2 py-1 border-l border-gray-200 dark:border-gray-700"
                   style={{ width: col.width }}
                 >
                   {item[col.key]}
