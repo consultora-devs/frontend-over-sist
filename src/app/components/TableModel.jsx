@@ -1,43 +1,33 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
 
-type Column = {
-  key: string;
-  width: number;
-};
-
-interface TableModelDraggableResizableProps {
-  data: Array<any>;
-  nameTable: string;
-}
-
-export function TableModel({ data, nameTable }: TableModelDraggableResizableProps) {
+export function TableModel({ data, nameTable }) {
   const localStorageKey = `tableColumnsOrder_${nameTable}`;
 
   // Función para obtener las columnas iniciales a partir de la data
-  const getDefaultColumns = (): Column[] => {
+  const getDefaultColumns = () => {
     return data && data.length > 0
       ? Object.keys(data[0])
-        .filter((key) => key !== "id")
-        .sort((a, b) => {
-          if (a === 'id_orden_trabajo') return -1;
-          if (b === 'id_orden_trabajo') return 1;
-          if (a === 'n_orden_servicio') return -1;
-          if (b === 'n_orden_servicio') return 1;
-          return 0;
-        })
-        .map((key) => ({ key, width: 150 }))
+          .filter((key) => key !== "id")
+          .sort((a, b) => {
+            if (a === "id_orden_trabajo") return -1;
+            if (b === "id_orden_trabajo") return 1;
+            if (a === "n_orden_servicio") return -1;
+            if (b === "n_orden_servicio") return 1;
+            return 0;
+          })
+          .map((key) => ({ key, width: 150 }))
       : [];
   };
 
   // Estado de columnas (incluyendo el orden y ancho)
-  const [columns, setColumns] = useState<Column[]>(() => {
+  const [columns, setColumns] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem(localStorageKey);
       if (saved) {
         try {
-          const parsed: Column[] = JSON.parse(saved);
+          const parsed = JSON.parse(saved);
           return parsed;
         } catch (error) {
           console.error("Error parseando columnas guardadas:", error);
@@ -46,25 +36,25 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     }
     return getDefaultColumns();
   });
-  const [draggedColIndex, setDraggedColIndex] = useState<number | null>(null);
+  const [draggedColIndex, setDraggedColIndex] = useState(null);
 
   // Estados para redimensionamiento
   const [isResizing, setIsResizing] = useState(false);
-  const [resizeColIndex, setResizeColIndex] = useState<number | null>(null);
+  const [resizeColIndex, setResizeColIndex] = useState(null);
   const [startX, setStartX] = useState(0);
   const [startWidth, setStartWidth] = useState(0);
 
   // Funciones para reordenar columnas (drag & drop)
-  const handleDragStart = (index: number, e: React.DragEvent<HTMLTableHeaderCellElement>) => {
+  const handleDragStart = (index, e) => {
     setDraggedColIndex(index);
     e.dataTransfer.effectAllowed = "move";
   };
 
-  const handleDragOver = (index: number, e: React.DragEvent<HTMLTableHeaderCellElement>) => {
+  const handleDragOver = (index, e) => {
     e.preventDefault();
   };
 
-  const handleDrop = (index: number, e: React.DragEvent<HTMLTableHeaderCellElement>) => {
+  const handleDrop = (index, e) => {
     e.preventDefault();
     if (draggedColIndex === null || draggedColIndex === index) return;
     const newColumns = [...columns];
@@ -75,7 +65,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   };
 
   // Funciones para redimensionar columnas
-  const handleMouseDown = (index: number, e: React.MouseEvent<HTMLDivElement>) => {
+  const handleMouseDown = (index, e) => {
     setIsResizing(true);
     setResizeColIndex(index);
     setStartX(e.clientX);
@@ -83,16 +73,13 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     e.preventDefault();
   };
 
-
   const handleMouseUp = () => {
     setIsResizing(false);
     setResizeColIndex(null);
   };
 
   useEffect(() => {
-
-    ///-.-.-----------------------------------------------
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e) => {
       if (!isResizing || resizeColIndex === null) return;
       const diffX = e.clientX - startX;
       const newWidth = Math.max(startWidth + diffX, 50); // ancho mínimo de 50px
@@ -102,8 +89,6 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
         )
       );
     };
-
-
 
     if (isResizing) {
       window.addEventListener("mousemove", handleMouseMove);
@@ -116,15 +101,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  },  [isResizing, resizeColIndex, startX, startWidth]);
-
-
-
-
-
-
-
-
+  }, [isResizing, resizeColIndex, startX, startWidth]);
 
   // Guardamos en localStorage cada vez que cambie el orden (o ancho) de las columnas.
   useEffect(() => {
@@ -134,16 +111,16 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   }, [columns, localStorageKey]);
 
   // Funciones de formateo
-  const formatDate = (isoDate: string): string => {
+  const formatDate = (isoDate) => {
     const date = new Date(isoDate);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
 
-  const padZeros = (value: string | number, length: number): string => {
-    return String(value).padStart(length, '0');
+  const padZeros = (value, length) => {
+    return String(value).padStart(length, "0");
   };
 
   const processedData = data.map((item) => {
@@ -176,7 +153,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   });
 
   return (
-    <div className=" relative overflow-x-auto mt-4 border rounded-lg shadow-lg max-h-[calc(100vh-180px)] bg-white dark:bg-gray-800">
+    <div className="relative overflow-x-auto mt-4 border rounded-lg shadow-lg max-h-[calc(100vh-180px)] bg-white dark:bg-gray-800">
       <table className="w-full text-sm text-left text-gray-800 dark:text-gray-200">
         <thead className="bg-blue-600 text-white dark:bg-gray-700">
           <tr>
@@ -211,7 +188,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
               key={rowIndex}
               className="border-b transition-colors hover:bg-gray-50 dark:hover:bg-gray-700"
             >
-              <td className="px-4 ">
+              <td className="px-4">
                 <Link href={`/${nameTable}/editar/${item.id}`}>
                   <svg
                     className="h-5 w-5 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 cursor-pointer transition-colors"
