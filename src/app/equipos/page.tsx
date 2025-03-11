@@ -5,9 +5,31 @@ import { TableModel } from '../components/TableModel';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+
+interface Equipos {
+  id: number;
+  empresa_matriz: string | null;
+  ruc: number;
+  fecha_servicio: string | null; // Puede ser una fecha en formato ISO 8601 o null
+  certificadora: string;
+  tipo_unidad: string;
+  placa: string;
+  area: string;
+  dias_transcurridos: number | null;
+  empresa: string;
+  id_orden_trabajo: number;
+  inspector: string | null;
+  departamento: string | null;
+  provincia: string | null;
+  n_orden_servicio: string | null;
+  comentarios: string | null;
+  id_certificado: string | null;
+}
+
+
 function App() {
-  const [fetchedData, setFetchedData] = useState<Array<any>>([]);
-  const [data, setData] = useState<Array<any>>([]);
+  const [fetchedData, setFetchedData] = useState<Equipos[]>([]);
+  const [data, setData] = useState<Equipos[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
@@ -31,10 +53,13 @@ function App() {
     const fetchData = async () => {
       setError(null);
       setLoading(true);
+
+      //agregar una variable de entorno
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
       
       try {
         const token = Cookies.get('auth_token');
-        const response = await fetch(`http://127.0.0.1:8000/api/equipos?page=${currentPage}`, {
+        const response = await fetch(`${API_URL}/api/equipos?page=${currentPage}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -60,7 +85,7 @@ function App() {
         setPreviousPage(result.prev_page_url);
         setCurrentPage(result.current_page);
         setLastPage(result.last_page);
-      } catch (error: any) {
+      } catch (error) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
       } finally {
@@ -99,7 +124,7 @@ function App() {
   // Función de búsqueda
   const handleSearch = () => {
     if (!selectedField || !searchTerm.trim()) return;
-    const filteredData = fetchedData.filter((item: any) => {
+    const filteredData = fetchedData.filter((item: Equipos | undefined | null | any) => {
       // Convertir el valor a string y compararlo en minúsculas
       const fieldValue = item[selectedField] ? String(item[selectedField]).toLowerCase() : '';
       return fieldValue.includes(searchTerm.toLowerCase());

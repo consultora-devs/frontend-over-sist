@@ -25,7 +25,7 @@ export interface Data {
   certificado: any;
 }
 
-const DataTable: React.FC<DataTableProps> = ({ data, loading = false, onEdit, onDelete }) => {
+const DataTable: React.FC<DataTableProps> = ({ data, loading = false}) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchField, setSearchField] = useState<'empresa' | 'ruc' | 'placa' | 'area'>('empresa');
   const [currentPage, setCurrentPage] = useState(1);
@@ -33,14 +33,11 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading = false, onEdit, on
   const router = useRouter();
 
   const pageCount = Math.ceil(data.length / itemsPerPage);
-  const currentData = data.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
-  };
+  }; 
 
   useEffect(() => {
     setCurrentPage(1);

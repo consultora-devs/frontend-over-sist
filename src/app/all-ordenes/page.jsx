@@ -21,9 +21,12 @@ function App() {
       setError(null);
       setLoading(true);
 
+      //agregar una variable de entorno
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
       try {
         const token = Cookies.get('auth_token');
-        const response = await fetch(`http://127.0.0.1:8000/api/ordenes-all?page=${currentPage}`, {
+        const response = await fetch(`${API_URL}/api/ordenes-all?page=${currentPage}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

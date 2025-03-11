@@ -1,12 +1,25 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
-import InputEmpresa from '../components/InputEmpresa';
 import { FileUpload } from "@/app/components/FileUpload";
+
+//crear una inteface para este formulario de los compos especificar sus tipos
+
+interface FormularioData {
+  tipo_unidad: string;
+  ruc: string;
+  fecha: string; // Tipo Date puede ser utilizado, pero al ser un input tipo 'date' es tratado como string
+  fecha_servicio: string; // Similar a 'fecha'
+  placa: string;
+  area: 'IZAJE' | 'END' | 'MANTTO IND' | 'FARADAY' | 'METRO' | 'SOLDADURA' | 'OTROS'; // Campo de selección
+  certificadora: 'OVERHAUL' | 'PREXA' | 'OTROS'; // Campo de selección
+  archivo: FileList | null; // Para el archivo que se sube con FileUpload (suponiendo que el componente maneja un archivo)
+}
+
 
 export default function Formulario() {
 
-  const { register, handleSubmit, setValue, getValues } = useForm();
+  const { register, handleSubmit,getValues } = useForm();
 
   const onSubmit = (data: any) => {
     // Obtener el valor seleccionado del select
@@ -147,7 +160,7 @@ export default function Formulario() {
               </div>
 
               <div>
-                <FileUpload />
+                <FileUpload title="Subir PDF"/>
               </div>
             </div>
 

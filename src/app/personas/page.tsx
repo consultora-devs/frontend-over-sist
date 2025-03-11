@@ -4,8 +4,45 @@ import Cookies from 'js-cookie';
 import { TableModel } from '../components/TableModel';
 import Link from 'next/link';
 
+
+interface Persona {
+  id: number;
+  empresa_matriz: string;
+  ruc: string | null;
+  fecha_servicio: string; // ISO 8601 date format
+  tipo_curso: string;
+  modalidad: string;
+  certificadora: string;
+  nombre_curso: string;
+  instructor: string;
+  fotocheck: string;
+  dni: number;
+  apellido_paterno: string;
+  apellido_materno: string;
+  primer_nombre: string;
+  segundo_nombre: string;
+  aprobo: boolean;
+  nota: number;
+  puesto: string;
+  equipo_examen: string;
+  fecha_factura: string; // ISO 8601 date format
+  numero_factura: string;
+  dias_transcurridos: number;
+  costo_sin_igv: number;
+  costo_con_igv: number;
+  igv_pagar: number;
+  detraccion: number;
+  se_facturo: boolean;
+  ya_pago: boolean;
+  pago_detraccion: boolean;
+  monto_dolares: number | null;
+  empresa: string;
+  id_orden_trabajo: number;
+}
+
+
 function App() {
-  const [data, setData] = useState<Array<any>>([]);
+  const [data, setData] = useState<Array<Persona>>([]);
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
 
@@ -27,8 +64,10 @@ function App() {
       setLoading(true); // Activar el estado de carga
 
       try {
+        //agregar una variable de entorno
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
         const token = Cookies.get('auth_token'); // Obtener token de la cookie
-        const response = await fetch(`http://127.0.0.1:8000/api/personas?page=${currentPage}`, {
+        const response = await fetch(`${API_URL}/api/personas?page=${currentPage}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Incluir token en el encabezado
@@ -42,12 +81,14 @@ function App() {
 
         const result = await response.json();
         setData(result.data);// Asignar los datos al estado
+
         // Se actualizan los estados de paginación según lo que retorne tu API
         setNextPage(result.next_page_url);
         setPreviousPage(result.prev_page_url);
         setCurrentPage(result.current_page);
         setLastPage(result.last_page);
-      } catch (error: any) {
+
+      } catch (error) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
       } finally {
@@ -85,16 +126,18 @@ function App() {
   };
 
 
-  // Función de búsqueda
-  const handleSearch = () => {
-    if (!selectedField || !searchTerm.trim()) return;
-    const filteredData = data.filter((item: any) => {
-      // Convertir el valor a string y compararlo en minúsculas
-      const fieldValue = item[selectedField] ? String(item[selectedField]).toLowerCase() : '';
-      return fieldValue.includes(searchTerm.toLowerCase());
-    });
-    setData(filteredData);
-  };
+// Función de búsqueda
+const handleSearch = () => {
+  if (!selectedField || !searchTerm.trim()) return;
+  
+  const filteredData = data.filter((item: Persona) => {
+    // Asegúrate de que selectedField es una clave válida de Persona
+    const fieldValue = item[selectedField as keyof Persona] ? String(item[selectedField as keyof Persona]).toLowerCase() : '';
+    return fieldValue.includes(searchTerm.toLowerCase());
+  });
+  setData(filteredData);
+};
+
 
   // Función para limpiar la búsqueda y restaurar los datos originales
   const handleClearSearch = () => {
@@ -123,9 +166,9 @@ function App() {
           </Link>
         </div>
 
-                {/* Buscador */}
-                <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:space-x-2 gap-1">
-          <select 
+        {/* Buscador */}
+        <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:space-x-2 gap-1">
+          <select
             className="border rounded p-2  sm:mb-0 bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
             value={selectedField}
             onChange={(e) => setSelectedField(e.target.value)}
@@ -137,14 +180,14 @@ function App() {
               </option>
             ))}
           </select>
-          <input 
-            type="text" 
-            placeholder="Buscar..." 
+          <input
+            type="text"
+            placeholder="Buscar..."
             className="border rounded p-2 flex-1 mb-2 sm:mb-0 bg-gray-100 dark:bg-gray-700 dark:text-gray-200"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
-          <button 
+          <button
             onClick={handleSearch}
             className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
             title="Buscar"
@@ -154,7 +197,7 @@ function App() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 12.65z" />
             </svg>
           </button>
-          <button 
+          <button
             onClick={handleClearSearch}
             className="bg-gray-300 text-gray-800 px-4 py-2 rounded hover:bg-gray-400 transition "
             title="Limpiar búsqueda"
@@ -172,7 +215,7 @@ function App() {
             <TableModel data={data} nameTable="personas" />
           </>
         )}
- 
+
         {/** Paginacion */}
         <div className="flex justify-center mt-4 space-x-2">
           <button

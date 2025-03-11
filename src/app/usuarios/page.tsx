@@ -5,8 +5,23 @@ import { TableModel } from '../components/TableModel';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+interface Usuario {
+  id: number;
+  name: string;
+  email: string;
+  email_verified_at: string | null; // Puede ser una fecha en formato ISO 8601 o null
+  created_at: string; // Fecha en formato ISO 8601
+  updated_at: string; // Fecha en formato ISO 8601
+  dni: string | null;
+  telefono: string | null;
+  direccion: string | null;
+  tipo_sangre: string | null;
+}
+
+
+
 function App() {
-  const [data, setData] = useState<Array<any>>([]);// Estado para manejar los datos de la tabla 
+  const [data, setData] = useState<Array<Usuario>>([]);// Estado para manejar los datos de la tabla 
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
@@ -28,7 +43,8 @@ function App() {
 
       try {
         const token = Cookies.get('auth_token'); // Obtener token de la cookie
-        const response = await fetch(`http://127.0.0.1:8000/api/users?page=${currentPage}`, {
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
+        const response = await fetch(`${API_URL}/api/users?page=${currentPage}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Incluir token en el encabezado
@@ -54,7 +70,7 @@ function App() {
          setCurrentPage(result.current_page);
          setLastPage(result.last_page);
         
-      } catch (error: any) {
+      } catch (error: unknown) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
       } finally {

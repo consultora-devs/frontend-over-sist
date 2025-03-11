@@ -11,7 +11,7 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false); // Estado para manejar la carga
-  const endpoint = process.env.URL_BACKEND || "http://127.0.0.1:8000";
+  const endpoint = process.env.NEXT_PUBLIC_API_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

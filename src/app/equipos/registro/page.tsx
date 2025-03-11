@@ -54,7 +54,7 @@ const CrearEquipoPage: React.FC = () => {
 
     const formDataToSend = new FormData();
     Object.keys(data).forEach((key) => {
-      const value = (data as any)[key];
+      const value = (data as unknown as any)[key];
       // Only append if value is not undefined/null
       if (value !== undefined && value !== null) {
         formDataToSend.append(key, value.toString());
@@ -64,8 +64,11 @@ const CrearEquipoPage: React.FC = () => {
     const token = Cookies.get("auth_token");
     setLoading(true); // Start loading
 
+    //agregar una variable de entorno
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/equipos', {
+      const response = await fetch(`${API_URL}/api/equipos`, {
         method: 'POST',
         body: formDataToSend,
         headers: {
@@ -157,7 +160,7 @@ const CrearEquipoPage: React.FC = () => {
           )}
 
           <div className="flex flex-col">
-            <InputEmpresa setValue={setValue} />
+            <InputEmpresa setValue={setValue} className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"/>
           </div>
 
           {isFieldVisible("empresa_matriz", tokenRole) && (

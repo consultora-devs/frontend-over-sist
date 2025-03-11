@@ -1,13 +1,10 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 
 function App() {
-  const [data, setData] = useState<Array<any>>([]);
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
   // Estados para los campos del formulario
@@ -25,9 +22,11 @@ function App() {
       role,
     };
 
+    //agregar una variable de entorno
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     try {
       const token = Cookies.get('auth_token');
-      const response = await fetch('http://localhost:8000/api/user/new', {
+      const response = await fetch(`${API_URL}/api/user/new`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -37,6 +36,7 @@ function App() {
       });
 
       if (!response.ok) {
+        setError('Error al registrar el usuario');
         throw new Error('Error al registrar el usuario');
       }
 
@@ -49,7 +49,7 @@ function App() {
       setEmail('');
       setPassword('');
       setRole('administrador');
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error al registrar el usuario:', error);
       alert('Hubo un error al registrar el usuario');
     }

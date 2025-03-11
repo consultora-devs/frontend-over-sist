@@ -36,10 +36,11 @@ const CrearEquipoPage: React.FC = () => {
     const token = Cookies.get("auth_token");
     setLoading(true);
     // Convert "aprobo" to boolean
-    data.aprobo = data.aprobo === "true";
+    data.aprobo = data.aprobo === true;
 
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/personas', {
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${API_URL}/api/personas`, {
         method: 'POST',
         headers: {
           "Content-Type": "application/json",

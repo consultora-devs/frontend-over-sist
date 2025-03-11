@@ -111,7 +111,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, resizeColIndex, startX, startWidth]);
+  }, [isResizing, resizeColIndex, startX, startWidth,handleMouseMove]);
 
   // Guardamos en localStorage cada vez que cambie el orden (o ancho) de las columnas.
   useEffect(() => {

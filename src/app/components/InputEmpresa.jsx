@@ -3,9 +3,9 @@ import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 
-function InputEmpresa({ setValue }) {
+function InputEmpresa({ setValue, className }) {
   const [empresas, setEmpresas] = useState([]);
-  const [selectedEmpresa, setSelectedEmpresa] = useState(null);
+  const [selectedEmpresa, setSelectedEmpresa] = useState<any>(null);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -16,7 +16,10 @@ function InputEmpresa({ setValue }) {
     const fetchEmpresas = async () => {
       const token = Cookies.get("auth_token");
 
-      const response = await fetch("http://127.0.0.1:8000/api/empresas_asociadas", {
+      //agregar una variable de entorno
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+      const response = await fetch(`${API_URL}/api/empresas_asociadas`, {
         method: "GET",
         headers: {
           "Authorization": `Bearer ${token}`,

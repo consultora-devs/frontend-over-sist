@@ -1,8 +1,9 @@
 "use client";
 
-import { useParams, useSearchParams } from 'next/navigation';
+import { useParams} from 'next/navigation';
 import Link from 'next/link';
 import Cookies from 'js-cookie';
+import Image from 'next/image';
 
 import React, { useCallback, useState, useEffect } from 'react';
 import { Upload, X, File as FileIcon, CheckCircle } from 'lucide-react';
@@ -12,9 +13,6 @@ interface FileWithPreview extends File {
 }
 
 
-interface FormData {
-    pdf: File | null;
-}
 
 function Pdf() {
     const [file, setFile] = useState<FileWithPreview | null>(null); // Cambié a null para que solo pueda haber un archivo.
@@ -40,7 +38,11 @@ function Pdf() {
             const formDataToSend = new FormData();
             formDataToSend.append('pdf', (e.target as any).pdf.files[0]);
             console.log("visualizar pdf o ruta", formDataToSend);
-            const response = await fetch(`http://127.0.0.1:8000/api/consulta-certificados/equipos/${id_certificado}`, {
+
+            //agregar una variable de entorno
+            const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+            const response = await fetch(`${API_URL}/api/consulta-certificados/equipos/${id_certificado}`, {
                 method: 'PATCH',
                 body: formDataToSend,
                 headers: {
@@ -107,8 +109,10 @@ function Pdf() {
 
     //realiza una peticion fetch a una api de tipo get con un useEffect
     useEffect(() => {
+        //agregar una variable de entorno
+        const API_URL = process.env.NEXT_PUBLIC_API_URL;
         const solicitudEquipo = async () => {
-            const res = await fetch(`http://127.0.0.1:8000/api/equipos/${equipoId}`,
+            const res = await fetch(`${API_URL}/api/equipos/${equipoId}`,
                 {
                     method: 'GET',
                     headers: {
@@ -170,7 +174,9 @@ function Pdf() {
                             >
                                 <div className="flex items-center space-x-4">
                                     {file.preview ? (
-                                        <img
+                                        <Image
+                                            width={40}
+                                            height={40}
                                             src={file.preview}
                                             alt={file.name}
                                             className="w-10 h-10 object-cover rounded"

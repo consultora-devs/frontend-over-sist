@@ -13,8 +13,11 @@ const AreaSelector = ({ register, errors }) => {
     const fetchAreas = async () => {
       const token = Cookies.get("auth_token");
 
+      //agregar una variable de entorno
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
       try {
-        const response = await fetch("http://127.0.0.1:8000/api/areas_all", {
+        const response = await fetch(`${API_URL}/api/areas_all`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,

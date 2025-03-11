@@ -22,9 +22,12 @@ function App() {
       setError(null); // Limpiar el error anterior, si lo hay
       setLoading(true); // Activar el estado de carga
 
+      //agregar una variable de entorno
+      const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
       try {
         const token = Cookies.get('auth_token'); // Obtener token de la cookie
-        const response = await fetch('http://127.0.0.1:8000/api/areas', {
+        const response = await fetch(`${API_URL}/api/areas`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Incluir token en el encabezado

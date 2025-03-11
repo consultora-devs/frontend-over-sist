@@ -3,6 +3,9 @@ import React, { useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
 
+//agregar una variable de entorno
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 function Page() {
   const router = useRouter(); // Hook para redireccionar
 
@@ -22,7 +25,7 @@ function Page() {
           return;
         }
 
-        const response = await fetch('http://127.0.0.1:8000/api/logout', {
+        const response = await fetch(`${API_URL}/api/logout`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`,

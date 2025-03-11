@@ -14,10 +14,18 @@ export function ThemeSwitcher() {
 
   if(!mounted) return null
 
+  function ModoDark() {
+    setTheme('dark')
+  }
+
+  function ModoLight() {
+    setTheme('light')
+  }
+
   return (
     <div className="bg-gray-800 p-2 max-w-max rounded-lg flex gap-2">
-      <button className="bg-green-500 rounded-md p-2" onClick={() => setTheme('light')}>Light </button>
-      <button className="bg-orange-500 rounded-md p-2" onClick={() => setTheme('dark')}>Dark </button>
+      <button className="bg-green-500 rounded-md p-2" onClick={ModoLight}>{theme === 'light' ? 'Light' : 'Light'}</button>
+      <button className="bg-orange-500 rounded-md p-2" onClick={ModoDark}>{theme === 'dark' ? 'Dark' : 'Dark'}</button>
     </div>
   )
 };
