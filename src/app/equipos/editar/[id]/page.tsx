@@ -127,10 +127,11 @@ const EditEquipoPage: React.FC = () => {
 
         const formDataToSend = new FormData();
         Object.keys(data).forEach((key) => {
-            const value = (data as any)[key];
+            const typedKey = key as keyof FormData;  // Aseguramos que la clave sea una clave válida de FormData
+            const value = data[typedKey];  // Aquí accedemos de manera segura
             // Only append if value is not undefined/null
             if (value !== undefined && value !== null) {
-                formDataToSend.append(key, value.toString());
+                formDataToSend.append(typedKey, value.toString());
             }
         });
 

@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 
 function InputEmpresa({ setValue, className }) {
   const [empresas, setEmpresas] = useState([]);
-  const [selectedEmpresa, setSelectedEmpresa] = useState<any>(null);
+  const [selectedEmpresa, setSelectedEmpresa] = useState(null);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {

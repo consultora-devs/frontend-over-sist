@@ -16,17 +16,16 @@ interface FormularioData {
   archivo: FileList | null; // Para el archivo que se sube con FileUpload (suponiendo que el componente maneja un archivo)
 }
 
-
 export default function Formulario() {
 
-  const { register, handleSubmit,getValues } = useForm();
+  const { register, handleSubmit,getValues } = useForm<FormularioData>();
 
-  const onSubmit = (data: any) => {
+  const onSubmit = (data: FormularioData) => {
     // Obtener el valor seleccionado del select
-    const empresaSeleccionada = getValues("empresa");
+    const empresaSeleccionada = getValues("tipo_unidad");
     console.log('Datos del formulario:', {
       ...data,
-      empresa: empresaSeleccionada,
+      tipo_unidad: empresaSeleccionada,
     });
   };
 
@@ -53,7 +52,7 @@ export default function Formulario() {
                   id="tipo-unidad"
                   className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
-                  {...register("tipo-unidad")}
+                  {...register("tipo_unidad")}
                   placeholder="Empresa Matriz"
                 />
               </div>
@@ -106,7 +105,7 @@ export default function Formulario() {
                   id="tipo-unidad"
                   className="w-full px-4 py-2 rounded-md border border-gray-200 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   required
-                  {...register("tipo-unidad")}
+                  {...register("tipo_unidad")}
                 />
               </div>
 

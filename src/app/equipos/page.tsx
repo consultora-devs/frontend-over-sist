@@ -124,9 +124,9 @@ function App() {
   // Función de búsqueda
   const handleSearch = () => {
     if (!selectedField || !searchTerm.trim()) return;
-    const filteredData = fetchedData.filter((item: Equipos | undefined | null | any) => {
+    const filteredData = fetchedData.filter((item: Equipos) => {
       // Convertir el valor a string y compararlo en minúsculas
-      const fieldValue = item[selectedField] ? String(item[selectedField]).toLowerCase() : '';
+      const fieldValue = item[selectedField as keyof Equipos] ? String(item[selectedField as keyof Equipos]).toLowerCase() : '';
       return fieldValue.includes(searchTerm.toLowerCase());
     });
     setData(filteredData);

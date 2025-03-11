@@ -104,7 +104,7 @@ function App() {
             <div className="animate-spin dark:border-gray-300 rounded-full h-12 w-12 border-b-2 border-gray-900"></div>
           </div>
         ) : (
-          <TableModel data={data} nameTable="ordenes_trab" />
+          <TableModel data={data} nameTable="ordenes_trab" n_orden_servicio="n_orden_servicio" />
         )}
 
         <div className="flex justify-center mt-4 space-x-2">

@@ -33,15 +33,26 @@ function Pdf() {
         e.preventDefault();
         const token = Cookies.get("auth_token");
         setLoading(true);
-
+    
         try {
             const formDataToSend = new FormData();
-            formDataToSend.append('pdf', (e.target as any).pdf.files[0]);
+            
+            // Hacemos un cast más específico a HTMLFormElement
+            const form = e.target as HTMLFormElement;
+            
+            // Aseguramos que el campo 'pdf' esté presente
+            const fileInput = form.pdf as HTMLInputElement;
+            if (fileInput.files && fileInput.files[0]) {
+                formDataToSend.append('pdf', fileInput.files[0]);
+            } else {
+                throw new Error('No file selected');
+            }
+            
             console.log("visualizar pdf o ruta", formDataToSend);
-
+    
             //agregar una variable de entorno
             const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+    
             const response = await fetch(`${API_URL}/api/consulta-certificados/equipos/${id_certificado}`, {
                 method: 'PATCH',
                 body: formDataToSend,
@@ -50,7 +61,7 @@ function Pdf() {
                     'Content-Type': 'application/json',
                 },
             });
-
+    
             if (response.ok) {
                 setMessage('PDF actualizado exitosamente');
                 setFile(null);
@@ -65,6 +76,7 @@ function Pdf() {
             setLoading(false); // Detenemos el loading
         }
     };
+    
 
     const onDrop = useCallback((acceptedFiles: FileWithPreview[]) => {
         // Solo asignamos el primer archivo, si hay más de uno, lo ignoramos
@@ -129,7 +141,7 @@ function Pdf() {
         }
 
         solicitudEquipo();
-    }, []);
+    }, [equipoId]);
 
 
     return (

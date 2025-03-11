@@ -19,15 +19,15 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   const getDefaultColumns = (): Column[] => {
     return data && data.length > 0
       ? Object.keys(data[0])
-          .filter((key) => key !== "id")
-          .sort((a, b) => {
-            if (a === 'id_orden_trabajo') return -1;
-            if (b === 'id_orden_trabajo') return 1;
-            if (a === 'n_orden_servicio') return -1;
-            if (b === 'n_orden_servicio') return 1;
-            return 0;
-          })
-          .map((key) => ({ key, width: 150 }))
+        .filter((key) => key !== "id")
+        .sort((a, b) => {
+          if (a === 'id_orden_trabajo') return -1;
+          if (b === 'id_orden_trabajo') return 1;
+          if (a === 'n_orden_servicio') return -1;
+          if (b === 'n_orden_servicio') return 1;
+          return 0;
+        })
+        .map((key) => ({ key, width: 150 }))
       : [];
   };
 
@@ -83,16 +83,6 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     e.preventDefault();
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isResizing || resizeColIndex === null) return;
-    const diffX = e.clientX - startX;
-    const newWidth = Math.max(startWidth + diffX, 50); // ancho mínimo de 50px
-    setColumns((cols) =>
-      cols.map((col, idx) =>
-        idx === resizeColIndex ? { ...col, width: newWidth } : col
-      )
-    );
-  };
 
   const handleMouseUp = () => {
     setIsResizing(false);
@@ -100,6 +90,21 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
   };
 
   useEffect(() => {
+
+    ///-.-.-----------------------------------------------
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!isResizing || resizeColIndex === null) return;
+      const diffX = e.clientX - startX;
+      const newWidth = Math.max(startWidth + diffX, 50); // ancho mínimo de 50px
+      setColumns((cols) =>
+        cols.map((col, idx) =>
+          idx === resizeColIndex ? { ...col, width: newWidth } : col
+        )
+      );
+    };
+
+
+
     if (isResizing) {
       window.addEventListener("mousemove", handleMouseMove);
       window.addEventListener("mouseup", handleMouseUp);
@@ -111,7 +116,15 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseup", handleMouseUp);
     };
-  }, [isResizing, resizeColIndex, startX, startWidth,handleMouseMove]);
+  },  [isResizing, resizeColIndex, startX, startWidth]);
+
+
+
+
+
+
+
+
 
   // Guardamos en localStorage cada vez que cambie el orden (o ancho) de las columnas.
   useEffect(() => {
@@ -129,7 +142,7 @@ export function TableModel({ data, nameTable }: TableModelDraggableResizableProp
     return `${day}/${month}/${year}`;
   };
 
-  const padZeros = (value: any, length: number): string => {
+  const padZeros = (value: string | number, length: number): string => {
     return String(value).padStart(length, '0');
   };
 

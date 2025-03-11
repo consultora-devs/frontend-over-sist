@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
 function App() {
-  const [data, setData] = useState<Array<any>>([]);// Estado para manejar los datos de la tabla 
+  const [data, setData] = useState<Array<unknown >>([]);// Estado para manejar los datos de la tabla 
   const [error, setError] = useState<string | null>(null); // Estado para manejar errores
   const [loading, setLoading] = useState<boolean>(true); // Estado para manejar la carga
   const router = useRouter(); // Hook para redireccionar
@@ -58,7 +58,7 @@ function App() {
         setLastPage(result.last_page || 1);
 
         
-      } catch (error: any) {
+      } catch (error: unknown) {
         setError('Hubo un problema al cargar los datos. Intenta nuevamente más tarde.');
         console.error('Error fetching data:', error);
       } finally {

@@ -22,7 +22,7 @@ export interface Data {
     src: string;
     type: string;
   }>;
-  certificado: any;
+  certificado: unknown;
 }
 
 const DataTable: React.FC<DataTableProps> = ({ data, loading = false}) => {
@@ -79,7 +79,7 @@ const DataTable: React.FC<DataTableProps> = ({ data, loading = false}) => {
         <select
           className="w-48 px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           value={searchField}
-          onChange={(e) => setSearchField(e.target.value as any)}
+          onChange={(e) => setSearchField(e.target.value as 'empresa' | 'ruc' | 'placa' | 'area')}
         >
           <option value="empresa">Empresa</option>
           <option value="ruc">RUC</option>
