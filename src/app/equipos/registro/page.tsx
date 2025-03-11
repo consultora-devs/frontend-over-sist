@@ -1,12 +1,11 @@
 "use client";
-
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import InputEmpresa from '@/app/components/InputEmpresa';
 import AreaSelector from '@/app/components/AreaSelector';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-
+import { useEffect } from 'react';
 
 export interface FormData {
   empresa_matriz: string;
@@ -45,6 +44,11 @@ const CrearEquipoPage: React.FC = () => {
 
   const [message, setMessage] = React.useState<string>(''); // State for success/error messages
   const [loading, setLoading] = React.useState<boolean>(false); // State for loading
+  const [isMounted, setIsMounted] = React.useState<boolean>(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
 
@@ -116,6 +120,11 @@ const CrearEquipoPage: React.FC = () => {
     return false;
   };
 
+  if (!isMounted) {
+    // Return a minimal placeholder during SSR to avoid mismatches
+    return <form className="grid grid-cols-1 md:grid-cols-2 gap-6"></form>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
       <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
@@ -148,7 +157,7 @@ const CrearEquipoPage: React.FC = () => {
           )}
 
           <div className="flex flex-col">
-            <InputEmpresa className="" setValue={setValue} />
+            <InputEmpresa setValue={setValue} />
           </div>
 
           {isFieldVisible("empresa_matriz", tokenRole) && (
@@ -264,21 +273,6 @@ const CrearEquipoPage: React.FC = () => {
             </div>
           )}
 
-          {/* {isFieldVisible("area", tokenRole) && (
-            <div className="flex flex-col">
-              <label htmlFor="area" className="mb-2 text-gray-700 dark:text-gray-200">
-                Área
-              </label>
-              <input
-                id="area"
-                type="text"
-                placeholder="Ingrese área"
-                {...register("area", { required: "Este campo es obligatorio" })}
-                className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
-              />
-              {errors.area && <span className="text-red-500 text-sm">{errors.area.message}</span>}
-            </div>
-          )} */}
           {isFieldVisible("area", tokenRole) && (
             <AreaSelector register={register} errors={errors} />
           )}
@@ -497,7 +491,7 @@ const CrearEquipoPage: React.FC = () => {
           {isFieldVisible("comentarios", tokenRole) && (
             <div className="flex flex-col">
               <label htmlFor="comentarios" className="mb-2 text-gray-700 dark:text-gray-200">
-                comentarios
+                Comentarios
               </label>
               <textarea
                 id="comentarios"
@@ -531,7 +525,7 @@ const CrearEquipoPage: React.FC = () => {
 
           <div className="flex flex-col">
               <label htmlFor="pdf" className="mb-2 text-gray-700 dark:text-gray-200">
-                PDF
+                Certificado
               </label>
               <input
                 type="file"

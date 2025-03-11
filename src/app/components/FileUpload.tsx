@@ -1,18 +1,21 @@
-"use client"
+"use client";
 import React, { useCallback, useState } from 'react';
 import { Upload, X, File as FileIcon, CheckCircle } from 'lucide-react';
+import Image from 'next/image'; // Import Next.js Image component
 
 interface FileWithPreview extends File {
   preview?: string;
 }
 
-export function FileUpload({ title }: { title: string }) {
-  
-  const [file, setFile] = useState<FileWithPreview | null>(null); // Cambié a null para que solo pueda haber un archivo.
-  const [isDragging, setIsDragging] = useState(false);
+interface FileUploadProps {
+  title: string;
+}
 
+export function FileUpload({ title }: FileUploadProps) {
+  const [file, setFile] = useState<FileWithPreview | null>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false);
+  
   const onDrop = useCallback((acceptedFiles: FileWithPreview[]) => {
-    // Solo asignamos el primer archivo, si hay más de uno, lo ignoramos
     const newFile = acceptedFiles[0];
     setFile(
       Object.assign(newFile, {
@@ -23,37 +26,37 @@ export function FileUpload({ title }: { title: string }) {
     );
   }, []);
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (e: React.DragEvent) => {
+  const handleDragLeave = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
   };
 
-  const handleDrop = (e: React.DragEvent) => {
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    const droppedFiles = Array.from(e.dataTransfer.files);
+    const droppedFiles = Array.from(e.dataTransfer.files) as FileWithPreview[];
     onDrop(droppedFiles);
   };
 
   const removeFile = () => {
-    setFile(null); // Eliminamos el archivo actual
+    setFile(null);
   };
 
   const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      const fileList = Array.from(e.target.files);
-      onDrop(fileList); // Solo tomamos el primer archivo
+      const fileList = Array.from(e.target.files) as FileWithPreview[];
+      onDrop(fileList);
     }
   };
 
   return (
     <div className="w-full max-w-3xl mx-auto p-6">
-      <h1 className='text-3xl text-center font-bold pb-10'>{title}</h1>
+      <h1 className="text-3xl text-center font-bold pb-10">{title}</h1>
       <div
         className={`relative border-2 border-dashed rounded-lg p-8 transition-all duration-300 ease-in-out
           ${isDragging 
@@ -90,10 +93,12 @@ export function FileUpload({ title }: { title: string }) {
           >
             <div className="flex items-center space-x-4">
               {file.preview ? (
-                <img
+                <Image
                   src={file.preview}
                   alt={file.name}
-                  className="w-10 h-10 object-cover rounded"
+                  width={40}  // Matches w-10 (2.5rem = 40px)
+                  height={40} // Matches h-10 (2.5rem = 40px)
+                  className="object-cover rounded"
                 />
               ) : (
                 <FileIcon className="w-10 h-10 text-gray-400" />

@@ -200,11 +200,27 @@ const EditEquipoPage: React.FC = () => {
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900 flex items-center justify-center p-4 py-10">
 
             <div className="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-                <Link className='text-blue-600 hover:text-blue-800' href={`/equipos/editar/${equipoId}/pdf`}><p>Actualizar PDF</p></Link>
-                <Link className='text-blue-600 hover:text-blue-800' href={`/equipos/${equipoId}/pdf`} target="_blank"><p>Ver PDF</p></Link>
-                <h2 className="text-xl font-bold text-center text-gray-900 dark:text-gray-100 mb-8">
-                    Actualizar orden de trabajo para equipo
-                </h2>
+                
+                <div className="flex justify-between items-center mb-6">
+                    <h2 className="text-2xl font-semibold text-gray-900 dark:text-gray-100">
+                        Actualizar Orden de trabajo Equipo {equipoId}
+                    </h2>
+                    <div className="space-x-4">
+                        <Link
+                        href={`/equipos/editar/${equipoId}/certificado`}
+                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                        >
+                        Cargar Certificado
+                        </Link>
+                        <Link
+                        href={`/equipos/${equipoId}/certificado`}
+                        target="_blank"
+                        className="text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                        >
+                        Ver Certificado
+                        </Link>
+                    </div>
+                </div>
 
 
                 {message && (
@@ -557,7 +573,7 @@ const EditEquipoPage: React.FC = () => {
                         <Link href="/equipos"
                             className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
                         >
-                            Cancelar
+                            Salir
                         </Link>
                         <button type="submit" disabled={loading} // Disable the button when loading
                             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center justify-center">

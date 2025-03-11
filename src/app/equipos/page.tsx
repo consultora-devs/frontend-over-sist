@@ -31,7 +31,7 @@ function App() {
     const fetchData = async () => {
       setError(null);
       setLoading(true);
-
+      
       try {
         const token = Cookies.get('auth_token');
         const response = await fetch(`http://127.0.0.1:8000/api/equipos?page=${currentPage}`, {

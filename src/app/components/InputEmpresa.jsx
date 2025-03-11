@@ -2,29 +2,10 @@
 import Select from 'react-select';
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { UseFormSetValue } from 'react-hook-form';
-import { FormData } from '@/app/equipos/editar/[id]/page';
 
-interface PropsInput {
-  className: string;
-  setValue: UseFormSetValue<FormData>;
-}
-
-function InputEmpresa({ className, setValue }: PropsInput) {
-  const [empresas, setEmpresas] = useState<{ 
-    value: string; 
-    label: string; 
-    ruc: string; 
-    empresa_matriz: string;
-  }[]>([]);
-  
-  const [selectedEmpresa, setSelectedEmpresa] = useState<{ 
-    value: string; 
-    label: string; 
-    ruc: string;  
-    empresa_matriz: string;
-  } | null>(null);
-  
+function InputEmpresa({ setValue }) {
+  const [empresas, setEmpresas] = useState([]);
+  const [selectedEmpresa, setSelectedEmpresa] = useState(null);
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -50,17 +31,11 @@ function InputEmpresa({ className, setValue }: PropsInput) {
 
       const data = await response.json();
 
-      // Adaptar los datos al formato del API
-      const empresasOptions = data.map((empresa: { 
-        id_empresa_asociada: string; 
-        empresa_asociada: string; 
-        ruc_empresa_asociada: string; 
-        nombre_empresa_matriz: string;
-      }) => ({
-        value: empresa.id_empresa_asociada,  // ID correcto
-        label: empresa.empresa_asociada, 
+      const empresasOptions = data.map(empresa => ({
+        value: empresa.id_empresa_asociada,
+        label: empresa.empresa_asociada,
         ruc: empresa.ruc_empresa_asociada,
-        empresa_matriz: empresa.nombre_empresa_matriz, // Nombre de la empresa matriz
+        empresa_matriz: empresa.nombre_empresa_matriz,
       }));
 
       setEmpresas(empresasOptions);
@@ -73,12 +48,12 @@ function InputEmpresa({ className, setValue }: PropsInput) {
     if (selectedEmpresa) {
       setValue('empresa', selectedEmpresa.value);
       setValue('ruc', selectedEmpresa.ruc);
-      setValue('empresa_matriz', selectedEmpresa.empresa_matriz); // Asegurar actualización
+      setValue('empresa_matriz', selectedEmpresa.empresa_matriz);
     }
   }, [selectedEmpresa, setValue]);
 
   const customStyles = {
-    control: (base: any) => ({
+    control: (base) => ({
       ...base,
       backgroundColor: isDark ? '#1a202c' : '#fff',
       borderColor: isDark ? '#4a5568' : '#ccc',
@@ -86,13 +61,13 @@ function InputEmpresa({ className, setValue }: PropsInput) {
       borderRadius: '0.375rem',
       padding: '0.5rem',
     }),
-    menu: (base: any) => ({
+    menu: (base) => ({
       ...base,
       backgroundColor: isDark ? '#1a202c' : '#fff',
       borderColor: isDark ? '#4a5568' : '#ccc',
       borderRadius: '0.375rem',
     }),
-    option: (base: any, state: any) => ({
+    option: (base, state) => ({
       ...base,
       backgroundColor: state.isSelected
         ? (isDark ? '#2d3748' : '#eee')
@@ -103,22 +78,29 @@ function InputEmpresa({ className, setValue }: PropsInput) {
       padding: '0.75rem',
       cursor: 'pointer',
     }),
-    singleValue: (base: any) => ({
+    singleValue: (base) => ({
       ...base,
       color: isDark ? 'white' : 'black',
     }),
-    placeholder: (base: any) => ({
+    placeholder: (base) => ({
       ...base,
       color: isDark ? 'white' : '#666',
     }),
-    input: (base: any) => ({
+    input: (base) => ({
       ...base,
       color: isDark ? 'white' : 'black',
     }),
   };
 
+  const handleChange = (selectedOption) => {
+    const empresaSeleccionada = empresas.find(e => e.value === selectedOption?.value);
+    if (empresaSeleccionada) {
+      setSelectedEmpresa(empresaSeleccionada);
+    }
+  };
+
   return (
-    <div className={className}>
+    <div>
       <div className="space-y-2">
         <label htmlFor="empresa" className="block text-sm font-medium text-gray-900 dark:text-gray-300">
           Empresa
@@ -127,12 +109,7 @@ function InputEmpresa({ className, setValue }: PropsInput) {
           id="empresa"
           options={empresas}
           value={selectedEmpresa}
-          onChange={(selectedOption) => {
-            const empresaSeleccionada = empresas.find(e => e.value === selectedOption?.value);
-            if (empresaSeleccionada) {
-              setSelectedEmpresa(empresaSeleccionada);
-            }
-          }}
+          onChange={handleChange}
           classNamePrefix="react-select"
           placeholder="Buscar o seleccionar"
           className="text-white"
